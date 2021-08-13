@@ -1,4 +1,4 @@
-package com.jun.plugin.base.code.generator.build;
+package com.jun.plugin.code.generator.build;
 
 import java.io.InputStream;
 import java.sql.Connection;
@@ -14,9 +14,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import com.jun.plugin.base.code.generator.util.JavaTypes;
-import com.jun.plugin.base.code.generator.util.ModelInfo;
-import com.jun.plugin.base.code.generator.util.StringUtils;
+import com.jun.plugin.code.generator.util.JavaTypes;
+import com.jun.plugin.code.generator.util.ModelInfo;
+import com.jun.plugin.code.generator.util.StringUtils;
 
 /****
  * @Author:shenkunlin
