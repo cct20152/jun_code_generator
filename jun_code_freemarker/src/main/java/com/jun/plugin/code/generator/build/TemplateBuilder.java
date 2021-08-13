@@ -183,9 +183,6 @@ public class TemplateBuilder {
                     //创建ServiceImpl实现类
                     ServiceImplBuilder.builder(modelMap);
 
-                    //创建Feign
-                    FeignBuilder.builder(modelMap);
-
                     //添加swagger路径映射
                     String format="string";
                     if(keyType.equalsIgnoreCase("integer") || keyType.equalsIgnoreCase("long")){
