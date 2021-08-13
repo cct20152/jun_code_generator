@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.jun.plugin.mapper.UserMapper;
-import com.jun.plugin.model.User;
+import com.jun.plugin.base.mapper.UserMapper;
+import com.jun.plugin.base.model.User;
 
 import java.util.List;
 
