@@ -18,13 +18,13 @@ public class DataSourceAop {
 
     private static Log logger = LogFactory.getLog(DataSourceAop.class);
 
-    @Before("execution(* com.jun.plugin.mapper..*.find*(..)) || execution(* com.jun.plugin.mapper..*.get*(..))")
+    @Before("execution(* com.jun.plugin.base.mapper..*.find*(..)) || execution(* com.jun.plugin.base.mapper..*.get*(..))")
     public void setReadDataSourceType() {
         DynamicDataSourceContextHolder.useSlaveDataSource();
         logger.info("dataSource切换到：Read");
     }
 
-    @Before("execution(* com.jun.plugin.mapper..*.insert*(..)) || execution(* com.jun.plugin.mapper..*.insert*(..)) || execution(* com.jun.plugin.mapper..*.update*(..))")
+    @Before("execution(* com.jun.plugin.base.mapper..*.insert*(..)) || execution(* com.jun.plugin.base.mapper..*.insert*(..)) || execution(* com.jun.plugin.base.mapper..*.update*(..))")
     public void setWriteDataSourceType() {
         DynamicDataSourceContextHolder.useMasterDataSource();
         logger.info("dataSource切换到：write");
