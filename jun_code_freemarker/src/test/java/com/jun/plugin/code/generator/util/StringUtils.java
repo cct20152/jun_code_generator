@@ -1,4 +1,4 @@
-package com.jun.plugin.code.util;
+package com.jun.plugin.code.generator.util;
 
 /****
  * @Author:shenkunlin

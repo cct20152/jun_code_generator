@@ -1,6 +1,6 @@
-package com.jun.plugin;
+package com.jun.plugin.code.generator;
 
-import com.jun.plugin.code.build.TemplateBuilder;
+import com.jun.plugin.code.generator.build.TemplateBuilder;
 
 public class CodeApplication {
 

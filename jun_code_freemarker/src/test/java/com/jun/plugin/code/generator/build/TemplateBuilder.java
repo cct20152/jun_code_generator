@@ -1,4 +1,4 @@
-package com.jun.plugin.code.build;
+package com.jun.plugin.code.generator.build;
 
 import java.io.InputStream;
 import java.sql.Connection;
@@ -14,9 +14,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import com.jun.plugin.code.util.JavaTypes;
-import com.jun.plugin.code.util.ModelInfo;
-import com.jun.plugin.code.util.StringUtils;
+import com.jun.plugin.code.generator.util.JavaTypes;
+import com.jun.plugin.code.generator.util.ModelInfo;
+import com.jun.plugin.code.generator.util.StringUtils;
 
 /****
  * @Author:shenkunlin
@@ -65,7 +65,7 @@ public class TemplateBuilder {
     static {
         try {
             //加载配置文件
-            InputStream is = TemplateBuilder.class.getClassLoader().getResourceAsStream("application.properties");
+            InputStream is = TemplateBuilder.class.getClassLoader().getResourceAsStream("config.properties");
 
             //创建Properties对象
             props.load(is);

@@ -1,4 +1,4 @@
-package com.jun.plugin.code.build;
+package com.jun.plugin.code.generator.build;
 
 import freemarker.template.Template;
 
@@ -8,23 +8,23 @@ import java.util.Map;
 
 /****
  * @Author:shenkunlin
- * @Description:Dao构建
+ * @Description:Service构建
  * @Date 2019/6/14 19:13
  *****/
-public class DaoBuilder {
+public class ServiceBuilder {
 
 
     /***
-     * 构建Dao
+     * 构建Service
      * @param modelMap
      */
     public static void builder(Map<String,Object> modelMap){
-        //生成Dao层文件
+        //生成Service层文件
         BuilderFactory.builder(modelMap,
-                "/template/dao",
-                "Mapper.java",
-                TemplateBuilder.PACKAGE_MAPPER,
-                "Mapper.java");
+                "/template/service",
+                "Service.java",
+                TemplateBuilder.PACKAGE_SERVICE_INTERFACE,
+                "Service.java");
     }
 
 }

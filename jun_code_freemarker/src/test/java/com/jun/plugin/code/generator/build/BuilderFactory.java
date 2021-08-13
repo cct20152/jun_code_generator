@@ -1,4 +1,4 @@
-package com.jun.plugin.code.build;
+package com.jun.plugin.code.generator.build;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
