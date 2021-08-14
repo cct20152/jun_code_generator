@@ -15,6 +15,7 @@
 	</properties>
 
 	<modules>
+		<module>jun_code_admin</module>
 		<module>jun_code_freemarker</module>
 		<module>jun_generator</module>
 		<module>jun_code_mybatis</module>
