@@ -224,10 +224,16 @@
             <artifactId>commons-pool2</artifactId>
         </dependency>
         <!--lombok-->
-        <dependency>
+        <!-- <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-        </dependency>
+        </dependency> -->
+        <!--lombok搭建-->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.10</version>
+		</dependency>
         
 	</dependencies>
 

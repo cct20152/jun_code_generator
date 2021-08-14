@@ -8,8 +8,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.jun.plugin.base.mapper.UserMapper;
 import com.jun.plugin.base.model.User;
-import com.jun.plugin.biz.dao.User1Mapper;
-import com.jun.plugin.biz.pojo.User1;
+//import com.jun.plugin.biz.dao.User1Mapper;
+//import com.jun.plugin.biz.pojo.User1;
 
 import java.util.List;
 
@@ -17,8 +17,8 @@ import java.util.List;
 @SpringBootTest
 public class ApplicationTests2 {
 
-	@Autowired
-	private User1Mapper userMapper;
+//	@Autowired
+//	private User1Mapper userMapper;
 
 	@Test
 	public void contextLoads() {
@@ -26,8 +26,8 @@ public class ApplicationTests2 {
 
 	@Test
 	public void test() {
-        List<User1> userList = userMapper.selectAll();
-        System.err.println(userList);
+//        List<User1> userList = userMapper.selectAll();
+//        System.err.println(userList);
     }
 
 }
