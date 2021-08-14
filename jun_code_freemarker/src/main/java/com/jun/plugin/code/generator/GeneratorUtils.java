@@ -24,14 +24,15 @@ import java.util.logging.Logger;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
-public class GenUtils {
+public class GeneratorUtils {
 
-	public static Logger log = Logger.getLogger(GenUtils.class.toString());
+	public static Logger log = Logger.getLogger(GeneratorUtils.class.toString());
 
 	public static void main(String[] args) throws IOException {
 		 //调用该方法即可
     	log.info("开始生成代码");
-    	GenUtils.builder();
+    	GeneratorUtils.builder();
+//    	GeneratorUtils.builderV2();
         //打开文件夹
 //        Runtime.getRuntime().exec("cmd.exe /c start "+GenUtils.PROJECT_PATH + GenUtils.PACKAGE_BASE.replace(".", "/"));
         log.info("代码生成完成");
@@ -87,12 +88,12 @@ public class GenUtils {
 	static {
 		try {
 			// 加载配置文件
-			InputStream is = GenUtils.class.getClassLoader().getResourceAsStream("config.properties");
+			InputStream is = GeneratorUtils.class.getClassLoader().getResourceAsStream("config.properties");
 
 			// 创建Properties对象
 			props.load(is);
 			PACKAGE_BASE = props.getProperty("basePackage");
-			TEMPLATE_PATH = GenUtils.class.getClassLoader().getResource("").getPath().replace("/target/classes/",
+			TEMPLATE_PATH = GeneratorUtils.class.getClassLoader().getResource("").getPath().replace("/target/classes/",
 					"") + "/src/main/resources/" + props.getProperty("template_path");
 			TEMPLATE_NAME = props.getProperty("template_path");
 			TABLEREMOVEPREFIXES = props.getProperty("tableRemovePrefixes");
@@ -112,7 +113,7 @@ public class GenUtils {
 			SERVICENAME = props.getProperty("serviceName");
 			SWAGGERUI_PATH = props.getProperty("swaggeruipath");
 			// 工程路径
-			PROJECT_PATH = GenUtils.class.getClassLoader().getResource("").getPath().replace("/target/classes/",
+			PROJECT_PATH = GeneratorUtils.class.getClassLoader().getResource("").getPath().replace("/target/classes/",
 					"") + "/src/main/java/";
 
 			// 加载数据库驱动
@@ -148,9 +149,9 @@ public class GenUtils {
 					// 获取表名
 					String tableName = tableResultSet.getString("TABLE_NAME");
 					// 名字操作,去掉tab_,tb_，去掉_并转驼峰
-					String table = GenUtils.replace_(GenUtils.replaceTab(tableName));
+					String table = GeneratorUtils.replace_(GeneratorUtils.replaceTab(tableName));
 					// 大写对象
-					String Table = GenUtils.firstUpper(table);
+					String Table = GeneratorUtils.firstUpper(table);
 
 					// 需要生成的Pojo属性集合
 					List<ModelInfo> models = new ArrayList<ModelInfo>();
@@ -172,18 +173,18 @@ public class GenUtils {
 						// 获取列名
 						String columnName = cloumnsSet.getString("COLUMN_NAME");
 						// 处理列名
-						String propertyName = GenUtils.replace_(columnName);
+						String propertyName = GeneratorUtils.replace_(columnName);
 						// 获取类型，并转成JavaType
-						String javaType = GenUtils.getType(cloumnsSet.getInt("DATA_TYPE"));
+						String javaType = GeneratorUtils.getType(cloumnsSet.getInt("DATA_TYPE"));
 						// 创建该列的信息
-						models.add(new ModelInfo(javaType, GenUtils.simpleName(javaType), propertyName,
-								GenUtils.firstUpper(propertyName), remarks, key.equals(columnName), columnName,
+						models.add(new ModelInfo(javaType, GeneratorUtils.simpleName(javaType), propertyName,
+								GeneratorUtils.firstUpper(propertyName), remarks, key.equals(columnName), columnName,
 								cloumnsSet.getString("IS_AUTOINCREMENT")));
 						// 需要导包的类型
 						typeSet.add(javaType);
 						// 主键类型
 						if (columnName.equals(key)) {
-							keyType = GenUtils.simpleName(javaType);
+							keyType = GeneratorUtils.simpleName(javaType);
 						}
 
 					}
@@ -197,7 +198,7 @@ public class GenUtils {
 					modelMap.put("models", models);
 					modelMap.put("typeSet", typeSet);
 					// 主键操作
-					modelMap.put("keySetMethod", "set" + GenUtils.firstUpper(GenUtils.replace_(key)));
+					modelMap.put("keySetMethod", "set" + GeneratorUtils.firstUpper(GeneratorUtils.replace_(key)));
 					modelMap.put("keyType", keyType);
 					modelMap.put("serviceName", SERVICENAME);
 					
@@ -208,7 +209,7 @@ public class GenUtils {
 					//************************************************************************
 
 					// 创建JavaBean
-					GenUtils.batchBuilderAll(modelMap);
+					GeneratorUtils.batchBuilderAll(modelMap);
 				}
 
 			}
@@ -224,7 +225,7 @@ public class GenUtils {
     public static void builderV2(){
         try {
             //获取数据库连接
-            Connection conn = DriverManager.getConnection(GenUtils.props.getProperty("url"),GenUtils.props.getProperty("uname"),GenUtils.props.getProperty("pwd"));
+            Connection conn = DriverManager.getConnection(GeneratorUtils.props.getProperty("url"),GeneratorUtils.props.getProperty("uname"),GeneratorUtils.props.getProperty("pwd"));
             DatabaseMetaData metaData = conn.getMetaData();
             
             System.out.println("获取数据库的产品名称: " + metaData.getDatabaseProductName());
@@ -253,11 +254,11 @@ public class GenUtils {
                     String tableName=tableResultSet.getString("TABLE_NAME");
                     String tableComment=tableResultSet.getString("REMARKS");
                     //名字操作,去掉tab_,tb_，去掉_并转驼峰
-                    String className = GenUtils.replace_(GenUtils.replaceTab(tableName));
+                    String className = GeneratorUtils.replace_(GeneratorUtils.replaceTab(tableName));
                     //大写对象
-                    String classNameFirstUpper =GenUtils.firstUpper(className);
+                    String classNameFirstUpper =GeneratorUtils.firstUpper(className);
                     
-                    if(GenUtils.checkTab(tableName)) {
+                    if(GeneratorUtils.checkTab(tableName)) {
                     	continue;
                     }
                     log.info("当前表名："+tableName);
@@ -276,9 +277,9 @@ public class GenUtils {
                     Set<String> typeSet = new HashSet<String>();
 
                     //获取表所有的列
-                    ResultSet cloumnsSet = metaData.getColumns(database, GenUtils.UNAME, tableName, null);
+                    ResultSet cloumnsSet = metaData.getColumns(database, GeneratorUtils.UNAME, tableName, null);
                     //获取主键
-                    ResultSet keySet = metaData.getPrimaryKeys(database, GenUtils.UNAME, tableName);
+                    ResultSet keySet = metaData.getPrimaryKeys(database, GeneratorUtils.UNAME, tableName);
                     String key ="",keyType="";
                     while (keySet.next()){
                         key=keySet.getString(4);   
@@ -289,27 +290,27 @@ public class GenUtils {
                         
                        String remarks = cloumnsSet.getString("REMARKS");//列的描述
                        String columnName = cloumnsSet.getString("COLUMN_NAME"); //获取列名
-                       String javaType = GenUtils.getType(cloumnsSet.getInt("DATA_TYPE"));//获取类型，并转成JavaType
+                       String javaType = GeneratorUtils.getType(cloumnsSet.getInt("DATA_TYPE"));//获取类型，并转成JavaType
                        int COLUMN_SIZE  = cloumnsSet.getInt("COLUMN_SIZE");//获取
                        String TABLE_SCHEM  = cloumnsSet.getString("TABLE_SCHEM");//获取
                        String COLUMN_DEF  = cloumnsSet.getString("COLUMN_DEF");//获取
                        int NULLABLE   = cloumnsSet.getInt("NULLABLE");//获取
 
-                       String propertyName = GenUtils.replace_(GenUtils.replaceRow(columnName));//处理列名，驼峰
+                       String propertyName = GeneratorUtils.replace_(GeneratorUtils.replaceRow(columnName));//处理列名，驼峰
                        
                        //创建该列的信息
-                       models.add(new ModelInfo(javaType, GenUtils.simpleName(javaType),propertyName,
-                    		   GenUtils.firstUpper(propertyName),remarks, key.equals(columnName),columnName,
+                       models.add(new ModelInfo(javaType, GeneratorUtils.simpleName(javaType),propertyName,
+                    		   GeneratorUtils.firstUpper(propertyName),remarks, key.equals(columnName),columnName,
                     		   cloumnsSet.getString("IS_AUTOINCREMENT")));
                         typeSet.add(javaType);//需要导包的类型
                         if(columnName.equals(key)){
-                            keyType=GenUtils.simpleName(javaType);//主键类型,单主键支持
+                            keyType=GeneratorUtils.simpleName(javaType);//主键类型,单主键支持
                         }
                         Map<String,Object> col = new HashMap<String,Object>();
                         col.put("javaType", javaType);
-                        col.put("simpleType", GenUtils.simpleName(javaType));
+                        col.put("simpleType", GeneratorUtils.simpleName(javaType));
                         col.put("name", propertyName);
-                        col.put("upperName", GenUtils.firstUpper(propertyName));
+                        col.put("upperName", GeneratorUtils.firstUpper(propertyName));
                         col.put("desc", remarks);
                         col.put("id", key.equals(columnName));
                         col.put("column", columnName);
@@ -321,9 +322,9 @@ public class GenUtils {
                         //V0
                         Column column = new Column();
                         column.setType(javaType);
-                        column.setSimpleType(GenUtils.simpleName(javaType));
+                        column.setSimpleType(GeneratorUtils.simpleName(javaType));
                         column.setName(propertyName);
-                        column.setUpperName(GenUtils.firstUpper(propertyName));
+                        column.setUpperName(GeneratorUtils.firstUpper(propertyName));
                         column.setDesc(remarks);
                         column.setId(key.equals(columnName));
                         column.setColumn(columnName);
@@ -335,7 +336,7 @@ public class GenUtils {
                         FieldInfo fieldInfo = new FieldInfo();
                         fieldInfo.setColumnName(columnName);
                         fieldInfo.setFieldName(propertyName);
-                        fieldInfo.setFieldClass(GenUtils.simpleName(javaType));
+                        fieldInfo.setFieldClass(GeneratorUtils.simpleName(javaType));
                         fieldInfo.setFieldComment(remarks);
                         fieldList.add(fieldInfo);
                     }
@@ -357,6 +358,29 @@ public class GenUtils {
                     
                     //模板V1的classInfo，创建该表的JavaBean元数据
                     Map<String, Object> modelMap = new HashMap<String, Object>();
+                    modelMap.put("isAutoImport", Boolean.TRUE);
+                    
+                    //模板V0
+                    modelMap.put("authorName","wujun");
+                    modelMap.put("packageName",GeneratorUtils.PACKAGE_BASE);
+                    modelMap.put("returnUtil","ReturnInfo");
+                    modelMap.put("returnUtilSuccess","ReturnInfo.ok");
+                    modelMap.put("returnUtilFailure","ReturnInfo.error");
+                    //兼容模板V0属性
+                    modelMap.put("table",className);
+                    modelMap.put("Table",classNameFirstUpper);
+                    modelMap.put("swagger",GeneratorUtils.SWAGGER);
+                    modelMap.put("TableName",tableName);
+                    modelMap.put("models",models);
+                    modelMap.put("typeSet",typeSet);
+                    //兼容模板V0属性，主键操作
+                    modelMap.put("keySetMethod","set"+GeneratorUtils.firstUpper(GeneratorUtils.replace_(key)));
+                    modelMap.put("keyGetMethod","get"+GeneratorUtils.firstUpper(GeneratorUtils.replace_(key)));
+                    modelMap.put("keyType",keyType);
+                    modelMap.put("serviceName",GeneratorUtils.SERVICENAME);
+//                    modelMap.put("isAutoImport","true");
+                    modelMap.put("Swagger",Boolean.FALSE);
+                    
                     Table classInfo = new Table();
                     classInfo.setTableName(tableName);
                     classInfo.setClassName(classNameFirstUpper);
@@ -364,30 +388,8 @@ public class GenUtils {
                     classInfo.setFieldList(fieldList);
                     classInfo.setColumnList(columnList);
                     modelMap.put("classInfo", classInfo);
-                    modelMap.put("isAutoImport", Boolean.TRUE);
-                    
-                    //模板V0
-                    modelMap.put("authorName","wujun");
-                    modelMap.put("packageName",GenUtils.PACKAGE_BASE);
-                    modelMap.put("returnUtil","ReturnInfo");
-                    modelMap.put("returnUtilSuccess","ReturnInfo.ok");
-                    modelMap.put("returnUtilFailure","ReturnInfo.error");
-                    //兼容模板V0属性
-                    modelMap.put("table",className);
-                    modelMap.put("Table",classNameFirstUpper);
-                    modelMap.put("swagger",GenUtils.SWAGGER);
-                    modelMap.put("TableName",tableName);
-                    modelMap.put("models",models);
-                    modelMap.put("typeSet",typeSet);
-                    //兼容模板V0属性，主键操作
-                    modelMap.put("keySetMethod","set"+GenUtils.firstUpper(GenUtils.replace_(key)));
-                    modelMap.put("keyGetMethod","get"+GenUtils.firstUpper(GenUtils.replace_(key)));
-                    modelMap.put("keyType",keyType);
-                    modelMap.put("serviceName",GenUtils.SERVICENAME);
-//                    modelMap.put("isAutoImport","true");
-                    modelMap.put("Swagger",Boolean.FALSE);
 
-                    GenUtils.batchBuilderV2(modelMap);
+                    GeneratorUtils.batchBuilderV2(modelMap);
                     log.info("正在生成模型："+modelMap);
 
                     //添加swagger路径映射
@@ -417,18 +419,18 @@ public class GenUtils {
 			String suffix) { // 生成文件后缀名字
 		try {
 			// 获取模板对象
-			Template template = GenUtils.loadTemplate(GenUtils.class.getResource(templatePath).getPath(),
+			Template template = GeneratorUtils.loadTemplate(GeneratorUtils.class.getResource(templatePath).getPath(),
 					templateFile);
 
 			// 创建文件夹
-			String path = GenUtils.PROJECT_PATH + storePath.replace(".", "/");
+			String path = GeneratorUtils.PROJECT_PATH + storePath.replace(".", "/");
 			File file = new File(path);
 			if (!file.exists()) {
 				file.mkdirs();
 			}
 
 			// 创建文件
-			GenUtils.writer(template, modelMap, path + "/" + modelMap.get("Table") + suffix);
+			GeneratorUtils.writer(template, modelMap, path + "/" + modelMap.get("Table") + suffix);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -460,11 +462,11 @@ public class GenUtils {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void writer(Template template, Map dataModel, String file) throws Exception {
 		// 包参数
-		dataModel.put("package_controller", GenUtils.PACKAGE_CONTROLLER);
-		dataModel.put("package_pojo", GenUtils.PACKAGE_POJO);
-		dataModel.put("package_mapper", GenUtils.PACKAGE_MAPPER);
-		dataModel.put("package_service", GenUtils.PACKAGE_SERVICE_INTERFACE);
-		dataModel.put("package_service_impl", GenUtils.PACKAGE_SERVICE_INTERFACE_IMPL);
+		dataModel.put("package_controller", GeneratorUtils.PACKAGE_CONTROLLER);
+		dataModel.put("package_pojo", GeneratorUtils.PACKAGE_POJO);
+		dataModel.put("package_mapper", GeneratorUtils.PACKAGE_MAPPER);
+		dataModel.put("package_service", GeneratorUtils.PACKAGE_SERVICE_INTERFACE);
+		dataModel.put("package_service_impl", GeneratorUtils.PACKAGE_SERVICE_INTERFACE_IMPL);
 
 		// 创建一个Writer对象，一般创建一FileWriter对象，指定生成的文件名。
 		Writer out = new FileWriter(new File(file));
@@ -477,9 +479,9 @@ public class GenUtils {
 	// new builder 2021-08-14
 	public static void builder(Map<String, Object> modelMap, String templatePath, String templateFile) {
 		String templateName = templateFile.substring(0, templateFile.lastIndexOf("."));
-		String storePath = GenUtils.PACKAGE_BASE + "." + templateName; // 存储路径
+		String storePath = GeneratorUtils.PACKAGE_BASE + "." + templateName; // 存储路径
 		String suffix = templateName + ".java"; // 生成文件后缀名字
-		GenUtils.builder(modelMap, templatePath, templateFile, storePath, suffix);
+		GeneratorUtils.builder(modelMap, templatePath, templateFile, storePath, suffix);
 	}
 
 	/***
@@ -488,18 +490,18 @@ public class GenUtils {
 	 */
 	public static void batchBuilderAll(Map<String, Object> modelMap) {
 		// 生成Controller层文件
-		GenUtils.builder(modelMap, "/template/controller", "Controller.java", GenUtils.PACKAGE_CONTROLLER,
+		GeneratorUtils.builder(modelMap, "/template/controller", "Controller.java", GeneratorUtils.PACKAGE_CONTROLLER,
 				"Controller.java");
 		// 生成Service层文件
-		GenUtils.builder(modelMap, "/template/service", "Service.java", GenUtils.PACKAGE_SERVICE_INTERFACE,
+		GeneratorUtils.builder(modelMap, "/template/service", "Service.java", GeneratorUtils.PACKAGE_SERVICE_INTERFACE,
 				"Service.java");
 		// 生成ServiceImpl层文件
-		GenUtils.builder(modelMap, "/template/service/impl", "ServiceImpl.java",
-				GenUtils.PACKAGE_SERVICE_INTERFACE_IMPL, "ServiceImpl.java");
+		GeneratorUtils.builder(modelMap, "/template/service/impl", "ServiceImpl.java",
+				GeneratorUtils.PACKAGE_SERVICE_INTERFACE_IMPL, "ServiceImpl.java");
 		// 生成Dao层文件
-		GenUtils.builder(modelMap, "/template/dao", "Mapper.java", GenUtils.PACKAGE_MAPPER, "Mapper.java");
+		GeneratorUtils.builder(modelMap, "/template/dao", "Mapper.java", GeneratorUtils.PACKAGE_MAPPER, "Mapper.java");
 		// 生成Pojo层文件
-		GenUtils.builder(modelMap, "/template/pojo", "Pojo.java", GenUtils.PACKAGE_POJO, ".java");
+		GeneratorUtils.builder(modelMap, "/template/pojo", "Pojo.java", GeneratorUtils.PACKAGE_POJO, ".java");
 	}
 
 	/***
@@ -509,17 +511,17 @@ public class GenUtils {
 	 */
 	public static void batchBuilder(Map<String, Object> modelMap) {
 		// 生成Controller层文件
-		GenUtils.builder(modelMap, "/template_v1/controller", "Controller.java");
+		GeneratorUtils.builder(modelMap, "/template_v1/controller", "Controller.java");
 		// 生成Dao层文件
-		GenUtils.builder(modelMap, "/template_v1/dao", "Mapper.java");
+		GeneratorUtils.builder(modelMap, "/template_v1/dao", "Mapper.java");
 		// 生成Feign层文件
-		GenUtils.builder(modelMap, "/template_v1/feign", "Feign.java");
+		GeneratorUtils.builder(modelMap, "/template_v1/feign", "Feign.java");
 		// 生成Pojo层文件
-		GenUtils.builder(modelMap, "/template_v1/pojo", "Pojo.java");
+		GeneratorUtils.builder(modelMap, "/template_v1/pojo", "Pojo.java");
 		// 生成Service层文件
-		GenUtils.builder(modelMap, "/template_v1/service", "Service.java");
+		GeneratorUtils.builder(modelMap, "/template_v1/service", "Service.java");
 		// 生成ServiceImpl层文件
-		GenUtils.builder(modelMap, "/template_v1/service/impl", "ServiceImpl.java");
+		GeneratorUtils.builder(modelMap, "/template_v1/service/impl", "ServiceImpl.java");
 
 	}
 
@@ -530,7 +532,7 @@ public class GenUtils {
 	 */
 	public static void batchBuilderV2(Map<String, Object> modelMap) {
 		List<Map<String, Object>> srcFiles = new ArrayList<Map<String, Object>>();
-		getFile(GenUtils.TEMPLATE_PATH, srcFiles);
+		getFile(GeneratorUtils.TEMPLATE_PATH, srcFiles);
 
 		for (int i = 0; i < srcFiles.size(); i++) {
 			HashMap<String, Object> m = (HashMap<String, Object>) srcFiles.get(i);
@@ -549,7 +551,7 @@ public class GenUtils {
 				String templateFilePathAndName = String.valueOf(m.get(key));
 				String templateFilePath = templateFilePathAndName.replace("\\" + templateFileName, "");
 				String templateFilePathMiddle = "";
-				if (!templateFilePath.endsWith(GenUtils.TEMPLATE_NAME.replace("/", "\\"))) {
+				if (!templateFilePath.endsWith(GeneratorUtils.TEMPLATE_NAME.replace("/", "\\"))) {
 					templateFilePathMiddle = templateFilePath
 							.substring(templateFilePath.lastIndexOf("\\"), templateFilePath.length()).replace("\\", "");
 				}
@@ -560,15 +562,15 @@ public class GenUtils {
 				}
 				try {
 					// 获取模板对象
-					Template template = GenUtils.loadTemplate(templateFilePath, templateFileName);
+					Template template = GeneratorUtils.loadTemplate(templateFilePath, templateFileName);
 					String path = null;
 					if (templateFileNameSuffix.equalsIgnoreCase(".java")) {
 						// 创建文件夹
-						path = GenUtils.PROJECT_PATH + "/" + GenUtils.PACKAGE_BASE.replace(".", "/") + "/"
+						path = GeneratorUtils.PROJECT_PATH + "/" + GeneratorUtils.PACKAGE_BASE.replace(".", "/") + "/"
 								+ templateFileNamePrefix.toLowerCase();
 					}
 					if (templateFileNameSuffix.equalsIgnoreCase(".ftl")) {
-						path = GenUtils.PROJECT_PATH + "/" + GenUtils.PACKAGE_BASE.replace(".", "/") + "/"
+						path = GeneratorUtils.PROJECT_PATH + "/" + GeneratorUtils.PACKAGE_BASE.replace(".", "/") + "/"
 								+ templateFilePathMiddle + "/";
 					}
 					File file = new File(path);
@@ -579,7 +581,7 @@ public class GenUtils {
 							.replace("${className}", String.valueOf(modelMap.get("Table")))
 							.replace("${classNameLower}", String.valueOf(modelMap.get("Table")).toLowerCase());
 					// 创建文件
-					GenUtils.writer(template, modelMap, path + "/" + fileNameNew);
+					GeneratorUtils.writer(template, modelMap, path + "/" + fileNameNew);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -695,7 +697,7 @@ public class GenUtils {
 		// 去掉前缀
 		type = simpleName(type);
 		// 将第一个字母转成小写
-		return GenUtils.firstLower(type);
+		return GeneratorUtils.firstLower(type);
 	}
 
 	public static String upperCaseFirstWord(String str) {
@@ -711,15 +713,15 @@ public class GenUtils {
 	
 	public static Boolean checkTab(String str){
     	str = str.toLowerCase();
-    	for(String x : GenUtils.SKIPTABLE.split(",")){
+    	for(String x : GeneratorUtils.SKIPTABLE.split(",")){
     		if(str.contains(x.toLowerCase())){
     			return true;
     		}
     	}
-    	if(GenUtils.INCLUETABLES.equals("*")){
+    	if(GeneratorUtils.INCLUETABLES.equals("*")){
 			return false;
 		}
-    	for(String x : GenUtils.INCLUETABLES.split(",")){
+    	for(String x : GeneratorUtils.INCLUETABLES.split(",")){
     		if(str.contains(x.toLowerCase())){
     			return false;
     		}
@@ -746,7 +748,7 @@ public class GenUtils {
 	}
 	public static String replaceRow(String str){
     	str = str.toLowerCase().replaceFirst("tab_","").replaceFirst("tb_","").replaceFirst("t_","");
-    	for(String x : GenUtils.ROWREMOVEPREFIXES.split(",")){
+    	for(String x : GeneratorUtils.ROWREMOVEPREFIXES.split(",")){
     		str = str.replaceFirst(x.toLowerCase(),"");
     	}
     	return str;

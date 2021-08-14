@@ -26,6 +26,8 @@ public class FieldInfo {
     public String getFieldName() {
         return fieldName;
     }
+//    bx96072
+//    123456
 
     public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
