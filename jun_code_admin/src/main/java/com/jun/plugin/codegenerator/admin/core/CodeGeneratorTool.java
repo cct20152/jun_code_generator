@@ -24,10 +24,5 @@ public class CodeGeneratorTool {
 		return TableParseUtil.processTableIntoClassInfo(tableSql);
 	}
 	
-	public static List<ClassInfo> processMetadataClassInfo(String tablename) throws IOException {
-		List<ClassInfo> list = new ArrayList<ClassInfo>();
-		GeneratorUtils.builderClassInfo(list);
-		return list;
-	}
 
 }
