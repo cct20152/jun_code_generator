@@ -1,7 +1,12 @@
+package ${packageController};
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import ${packageModel}.${classInfo.className};
+import ${packageService}.${classInfo.className}Service;
+import com.jun.plugin.codegenerator.admin.model.ReturnT;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -51,7 +56,7 @@ public class ${classInfo.className}Controller {
     */
     @RequestMapping("/load")
     @ResponseBody
-    public ReturnT<String> load(int id){
+    public ${classInfo.className} load(int id){
         return ${classInfo.className?uncap_first}Service.load(id);
     }
 

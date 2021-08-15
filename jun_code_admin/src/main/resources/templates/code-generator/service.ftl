@@ -1,4 +1,8 @@
+package ${packageService};
 import java.util.Map;
+
+import ${packageModel}.${classInfo.className};
+import com.jun.plugin.codegenerator.admin.model.ReturnT;
 
 /**
 * ${classInfo.classComment}

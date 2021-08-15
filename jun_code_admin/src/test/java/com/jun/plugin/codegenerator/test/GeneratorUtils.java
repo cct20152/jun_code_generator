@@ -5,26 +5,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.mybatis.generator.api.MyBatisGenerator;
-import org.mybatis.generator.config.Configuration;
-import org.mybatis.generator.config.Context;
-import org.mybatis.generator.config.GeneratedKey;
-import org.mybatis.generator.config.JDBCConnectionConfiguration;
-import org.mybatis.generator.config.JavaClientGeneratorConfiguration;
-import org.mybatis.generator.config.JavaModelGeneratorConfiguration;
-import org.mybatis.generator.config.ModelType;
-import org.mybatis.generator.config.PluginConfiguration;
-import org.mybatis.generator.config.PropertyRegistry;
-import org.mybatis.generator.config.SqlMapGeneratorConfiguration;
-import org.mybatis.generator.config.TableConfiguration;
-import org.mybatis.generator.internal.DefaultShellCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,9 +42,10 @@ public class GeneratorUtils {
     private static final String JAVA_PATH = "/src/main/java"; //java文件路径
     private static final String RESOURCES_PATH = "/src/main/resources";//资源文件路径
 
-    private static final String PACKAGE_PATH_SERVICE = packageConvertPath("com.jun.plugin.biz.service");//生成的Service存放路径
-    private static final String PACKAGE_PATH_SERVICE_IMPL = packageConvertPath("com.jun.plugin.biz.service.impl");//生成的Service实现存放路径
-    private static final String PACKAGE_PATH_CONTROLLER = packageConvertPath("com.jun.plugin.biz.controller");//生成的Controller存放路径
+//    private static final String PACKAGE_PATH = package2Path("com.jun.plugin.biz");//生成的Service存放路径
+    private static final String PACKAGE_PATH_SERVICE = package2Path("com.jun.plugin.biz.service");//生成的Service存放路径
+    private static final String PACKAGE_PATH_SERVICE_IMPL = package2Path("com.jun.plugin.biz.service.impl");//生成的Service实现存放路径
+//    private static final String PACKAGE_PATH_CONTROLLER = package2Path("com.jun.plugin.biz.controller");//生成的Controller存放路径
 
     private static final String AUTHOR = "Wujun";//@author
     private static final String DATE = new SimpleDateFormat("yyyy/MM/dd").format(new Date());//@date
@@ -133,18 +120,50 @@ public class GeneratorUtils {
 		List<ClassInfo> classInfos = CodeGeneratorTool.processMetadataClassInfo(null);
 		classInfos.forEach(classInfo -> {
 			// code genarete
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("classInfo", classInfo);
+			Map<String, Object> datas = new HashMap<String, Object>();
+			datas.put("classInfo", classInfo);
 			// result
 			Map<String, String> result = new HashMap<String, String>();
 			try {
-				result.put("controller_code", GeneratorUtils.processString("code-generator/controller.ftl", params));
-				result.put("service_code", GeneratorUtils.processString("code-generator/service.ftl", params));
-				result.put("service_impl_code", GeneratorUtils.processString("code-generator/service_impl.ftl", params));
-				result.put("dao_code", GeneratorUtils.processString("code-generator/dao.ftl", params));
-				result.put("mybatis_code", GeneratorUtils.processString("code-generator/mybatis.ftl", params));
-				result.put("model_code", GeneratorUtils.processString("code-generator/model.ftl", params));
-				System.out.println(result);
+//				result.put("controller_code", GeneratorUtils.processString("code-generator/controller.ftl", datas));
+//				result.put("service_code", GeneratorUtils.processString("code-generator/service.ftl", datas));
+//				result.put("service_impl_code", GeneratorUtils.processString("code-generator/service_impl.ftl", datas));
+//				result.put("dao_code", GeneratorUtils.processString("code-generator/dao.ftl", datas));
+//				result.put("mybatis_code", GeneratorUtils.processString("code-generator/mybatis.ftl", datas));
+//				result.put("model_code", GeneratorUtils.processString("code-generator/model.ftl", datas));
+//				System.out.println(result);
+				String filePath = "";
+				datas.put("packageController","com.jun.plugin.biz.controller");
+				datas.put("packageService","com.jun.plugin.biz.service");
+				datas.put("packageServiceImpl","com.jun.plugin.biz.service.impl");
+				datas.put("packageDao","com.jun.plugin.biz.dao");
+				datas.put("packageMybatisXML","com.jun.plugin.biz.model");
+				datas.put("packageModel","com.jun.plugin.biz.model");
+				
+				// 生成  controller.ftl
+				filePath = PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.controller") + classInfo.getClassName()+"Controller.java";
+				GeneratorUtils.processFile("code-generator/controller.ftl", datas, filePath);
+				
+				// 生成  service.ftl
+				filePath = PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.service") + classInfo.getClassName()+"Service.java";
+				GeneratorUtils.processFile("code-generator/service.ftl", datas, filePath);
+				
+				// 生成  service_impl.ftl
+				filePath = PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.service.impl") + classInfo.getClassName()+"ServiceImpl.java";
+				GeneratorUtils.processFile("code-generator/service_impl.ftl", datas, filePath);
+				
+				// 生成  dao.ftl
+				filePath = PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.dao") + classInfo.getClassName()+"Dao.java";
+				GeneratorUtils.processFile("code-generator/dao.ftl", datas, filePath);
+				
+				// 生成  mybatis.ftl
+				filePath = PROJECT_PATH + RESOURCES_PATH + "/mybatis/" + classInfo.getClassName()+".xml";
+				GeneratorUtils.processFile("code-generator/mybatis.ftl", datas, filePath);
+
+		    	// 生成  model.ftl
+		    	filePath = PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.model") + classInfo.getClassName()+".java";
+				GeneratorUtils.processFile("code-generator/model.ftl", datas, filePath);
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (TemplateException e) {
@@ -162,6 +181,26 @@ public class GeneratorUtils {
 
 	}
     
+    /**
+     * 
+     * @param templateName  模板名称
+     * @param data  模板数据
+     * @param fileName  文件名称
+     * @param packagePath  文件package路径，相对路径
+     * @throws IOException
+     * @throws TemplateException
+     */
+    public static void processFile(String templateName, Map<String, Object> data,String filePath)
+    		throws IOException, TemplateException {
+    	Template template = getConfiguration().getTemplate(templateName);
+    	 File file = new File(filePath);
+         if (!file.getParentFile().exists()) {
+             file.getParentFile().mkdirs();
+         }
+         template.process(data, new FileWriter(file));
+         System.out.println(filePath + " 生成成功");
+    }
+    
     public static String processTemplateIntoString(Template template, Object model)
             throws IOException, TemplateException {
 
@@ -172,7 +211,6 @@ public class GeneratorUtils {
 
     public static String processString(String templateName, Map<String, Object> params)
             throws IOException, TemplateException {
-
         Template template = getConfiguration().getTemplate(templateName);
         String htmlText = processTemplateIntoString(template, params);
         return htmlText;
@@ -206,7 +244,7 @@ public class GeneratorUtils {
         return tableNameConvertMappingPath(tableName);
     }
 
-    private static String packageConvertPath(String packageName) {
+    private static String package2Path(String packageName) {
         return String.format("/%s/", packageName.contains(".") ? packageName.replaceAll("\\.", "/") : packageName);
     }
 

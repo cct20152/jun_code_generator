@@ -1,5 +1,8 @@
+package ${packageDao};
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
+import ${packageModel}.${classInfo.className};
 
 import java.util.List;
 

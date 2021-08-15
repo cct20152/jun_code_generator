@@ -1,4 +1,4 @@
-package com.jun.plugin.codegenerator.admin;
+package com.jun.plugin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
