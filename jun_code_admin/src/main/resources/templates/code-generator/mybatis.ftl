@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="${packageMybatisXML}.${classInfo.className}Dao">
 
-    <resultMap id="${classInfo.className}" type="Model路径.${classInfo.className}" >
+    <resultMap id="${classInfo.className}" type="${packageModel}.${classInfo.className}" >
     <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
     <#list classInfo.fieldList as fieldItem >
         <result column="${fieldItem.columnName}" property="${fieldItem.fieldName}" />
