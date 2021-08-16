@@ -2,11 +2,8 @@ package com.jun.plugin.codegenerator.admin.core;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.jun.plugin.codegenerator.admin.core.model.ClassInfo;
-import com.jun.plugin.codegenerator.admin.core.util.GeneratorUtils;
 import com.jun.plugin.codegenerator.admin.core.util.TableParseUtil;
 
 /**
