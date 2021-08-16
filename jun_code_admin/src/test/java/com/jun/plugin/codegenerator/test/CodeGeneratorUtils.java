@@ -64,7 +64,6 @@ public class CodeGeneratorUtils {
 	public static Boolean SWAGGER = Boolean.valueOf(props.getProperty("enableSwagger"));
 	public static String SERVICENAME = props.getProperty("serviceName");
 	public static String SWAGGERUI_PATH = props.getProperty("swaggeruipath");
-	public static String OUTROOT;
 	public static String TEMPLATE_PATH = CodeGeneratorUtils.class.getClassLoader().getResource("").getPath()
 			.replace("/target/classes/", "") + "/src/main/resources/" + props.getProperty("template_path");
 	public static String TEMPLATE_NAME = props.getProperty("template_path");
