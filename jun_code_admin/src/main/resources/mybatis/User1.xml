@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jun.plugin.biz.model.User1Dao">
+
+    <resultMap id="User1" type="com.jun.plugin.biz.model.User1" >
+        <result column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="nick_name" property="nickName" />
+        <result column="sex" property="sex" />
+        <result column="register_date" property="registerDate" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `id`,
+        `username`,
+        `password`,
+        `nick_name`,
+        `sex`,
+        `register_date`
+    </sql>
+
+    <insert id="insert" parameterType="java.util.Map" >
+        INSERT INTO user1 (
+            `id`,
+            `username`,
+            `password`,
+            `nick_name`,
+            `sex`,
+            `register_date`
+        )
+        VALUES(
+            #{user1.id},
+            #{user1.username},
+            #{user1.password},
+            #{user1.nickName},
+            #{user1.sex},
+            #{user1.registerDate}
+        )
+    </insert>
+
+    <delete id="delete" parameterType="java.util.Map" >
+        DELETE FROM user1
+        WHERE `id` = #{id}
+    </delete>
+
+    <update id="update" parameterType="java.util.Map" >
+        UPDATE user1
+        SET
+            id = #{user1.id},
+            username = #{user1.username},
+            password = #{user1.password},
+            nick_name = #{user1.nickName},
+            sex = #{user1.sex},
+            register_date = #{user1.registerDate},
+            UpdateTime = NOW()
+        WHERE `id` = #{user1.id}
+    </update>
+
+
+    <select id="load" parameterType="java.util.Map" resultMap="User1">
+        SELECT <include refid="Base_Column_List" />
+        FROM user1
+        WHERE `id` = #{id}
+    </select>
+
+    <select id="pageList" parameterType="java.util.Map" resultMap="User1">
+        SELECT <include refid="Base_Column_List" />
+        FROM user1
+        LIMIT #{offset}, #{pagesize}
+    </select>
+
+    <select id="pageListCount" parameterType="java.util.Map" resultType="int">
+        SELECT count(1)
+        FROM user1
+    </select>
+
+</mapper>

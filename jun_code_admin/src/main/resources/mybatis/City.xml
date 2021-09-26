@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jun.plugin.biz.model.CityDao">
+
+    <resultMap id="City" type="com.jun.plugin.biz.model.City" >
+        <result column="CITY_ID" property="cityId" />
+        <result column="PROVINCE_ID" property="provinceId" />
+        <result column="NAME" property="name" />
+        <result column="CREATED" property="created" />
+        <result column="LASTMOD" property="lastmod" />
+        <result column="STATUS" property="status" />
+        <result column="CREATER" property="creater" />
+        <result column="MODIFYER" property="modifyer" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `CITY_ID`,
+        `PROVINCE_ID`,
+        `NAME`,
+        `CREATED`,
+        `LASTMOD`,
+        `STATUS`,
+        `CREATER`,
+        `MODIFYER`
+    </sql>
+
+    <insert id="insert" parameterType="java.util.Map" >
+        INSERT INTO city (
+            `CITY_ID`,
+            `PROVINCE_ID`,
+            `NAME`,
+            `CREATED`,
+            `LASTMOD`,
+            `STATUS`,
+            `CREATER`,
+            `MODIFYER`
+        )
+        VALUES(
+            #{city.cityId},
+            #{city.provinceId},
+            #{city.name},
+            #{city.created},
+            #{city.lastmod},
+            #{city.status},
+            #{city.creater},
+            #{city.modifyer}
+        )
+    </insert>
+
+    <delete id="delete" parameterType="java.util.Map" >
+        DELETE FROM city
+        WHERE `id` = #{id}
+    </delete>
+
+    <update id="update" parameterType="java.util.Map" >
+        UPDATE city
+        SET
+            CITY_ID = #{city.cityId},
+            PROVINCE_ID = #{city.provinceId},
+            NAME = #{city.name},
+            CREATED = #{city.created},
+            LASTMOD = #{city.lastmod},
+            STATUS = #{city.status},
+            CREATER = #{city.creater},
+            MODIFYER = #{city.modifyer},
+            UpdateTime = NOW()
+        WHERE `id` = #{city.id}
+    </update>
+
+
+    <select id="load" parameterType="java.util.Map" resultMap="City">
+        SELECT <include refid="Base_Column_List" />
+        FROM city
+        WHERE `id` = #{id}
+    </select>
+
+    <select id="pageList" parameterType="java.util.Map" resultMap="City">
+        SELECT <include refid="Base_Column_List" />
+        FROM city
+        LIMIT #{offset}, #{pagesize}
+    </select>
+
+    <select id="pageListCount" parameterType="java.util.Map" resultType="int">
+        SELECT count(1)
+        FROM city
+    </select>
+
+</mapper>
