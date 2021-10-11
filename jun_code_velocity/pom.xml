@@ -5,11 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.jun.plugin</groupId>
-	<artifactId>jun_code_generator</artifactId>
+	<artifactId>jun_code_velocity</artifactId>
 	<version>4.6.0</version>
 	<packaging>jar</packaging>
 
-	<name>jun_code_generator</name> 
+	<name>jun_code_velocity</name> 
 	<description>代码生成器</description>
 
 	<parent>
