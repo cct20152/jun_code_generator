@@ -16,7 +16,7 @@ import com.jun.plugin.framework.interceptor.RepeatSubmitInterceptor;
  * @author ruoyi
  */
 @Configuration
-public class ResourcesConfig implements WebMvcConfigurer
+public class ResourcesConfig2 implements WebMvcConfigurer
 {
     /**
      * 首页地址

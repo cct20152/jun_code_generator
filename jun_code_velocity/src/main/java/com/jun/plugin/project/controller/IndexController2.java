@@ -12,7 +12,7 @@ import com.jun.plugin.framework.web.controller.BaseController;
  * @author ruoyi
  */
 @Controller
-public class IndexController extends BaseController
+public class IndexController2 extends BaseController
 {
 
     // 系统首页

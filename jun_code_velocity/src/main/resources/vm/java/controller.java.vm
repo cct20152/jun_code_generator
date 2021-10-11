@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.framework.aspectj.lang.annotation.Log;
-import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
+import com.jun.plugin.framework.aspectj.lang.annotation.Log;
+import com.jun.plugin.framework.aspectj.lang.enums.BusinessType;
 import ${packageName}.${businessName}.domain.${ClassName};
 import ${packageName}.${businessName}.service.I${ClassName}Service;
-import com.ruoyi.framework.web.controller.BaseController;
-import com.ruoyi.framework.web.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.jun.plugin.framework.web.controller.BaseController;
+import com.jun.plugin.framework.web.domain.AjaxResult;
+import com.jun.plugin.common.utils.poi.ExcelUtil;
 #if($table.crud || $table.sub)
-import com.ruoyi.framework.web.page.TableDataInfo;
+import com.jun.plugin.framework.web.page.TableDataInfo;
 #elseif($table.tree)
-import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.framework.web.domain.Ztree;
+import com.jun.plugin.common.utils.StringUtils;
+import com.jun.plugin.framework.web.domain.Ztree;
 #end
 
 /**
