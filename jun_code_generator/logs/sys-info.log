@@ -1,0 +1,112 @@
+10:05:25.906 [background-preinit] INFO  o.h.v.i.util.Version - [<clinit>,21] - HV000001: Hibernate Validator 6.0.21.Final
+10:05:26.091 [restartedMain] INFO  c.j.p.WebApplication - [logStarting,55] - Starting WebApplication on DESKTOP-FS89CAQ with PID 14968 (D:\workspace\github\jun_api_service\jun_code_generator\target\classes started by Wujun in D:\workspace\github\jun_api_service\jun_code_generator)
+10:05:26.093 [restartedMain] INFO  c.j.p.WebApplication - [logStartupProfileInfo,655] - The following profiles are active: mysql
+10:05:28.137 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Initializing ProtocolHandler ["http-nio-5063"]
+10:05:28.140 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Starting service [Tomcat]
+10:05:28.141 [restartedMain] INFO  o.a.c.c.StandardEngine - [log,173] - Starting Servlet engine: [Apache Tomcat/9.0.41]
+10:05:28.247 [restartedMain] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring embedded WebApplicationContext
+10:05:28.586 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Stopping service [Tomcat]
+10:08:58.037 [background-preinit] INFO  o.h.v.i.util.Version - [<clinit>,21] - HV000001: Hibernate Validator 6.0.21.Final
+10:08:58.119 [restartedMain] INFO  c.j.p.WebApplication - [logStarting,55] - Starting WebApplication on DESKTOP-FS89CAQ with PID 16732 (D:\workspace\github\jun_api_service\jun_code_generator\target\classes started by Wujun in D:\workspace\github\jun_api_service\jun_code_generator)
+10:08:58.121 [restartedMain] INFO  c.j.p.WebApplication - [logStartupProfileInfo,655] - The following profiles are active: mysql
+10:09:02.823 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Initializing ProtocolHandler ["http-nio-5063"]
+10:09:02.825 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Starting service [Tomcat]
+10:09:02.826 [restartedMain] INFO  o.a.c.c.StandardEngine - [log,173] - Starting Servlet engine: [Apache Tomcat/9.0.41]
+10:09:02.996 [restartedMain] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring embedded WebApplicationContext
+10:09:03.611 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Stopping service [Tomcat]
+10:11:53.610 [background-preinit] INFO  o.h.v.i.util.Version - [<clinit>,21] - HV000001: Hibernate Validator 6.0.21.Final
+10:11:53.683 [restartedMain] INFO  c.j.p.WebApplication - [logStarting,55] - Starting WebApplication on DESKTOP-FS89CAQ with PID 19300 (D:\workspace\github\jun_api_service\jun_code_generator\target\classes started by Wujun in D:\workspace\github\jun_api_service\jun_code_generator)
+10:11:53.685 [restartedMain] INFO  c.j.p.WebApplication - [logStartupProfileInfo,655] - The following profiles are active: sqlite
+10:11:58.155 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Initializing ProtocolHandler ["http-nio-5063"]
+10:11:58.156 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Starting service [Tomcat]
+10:11:58.157 [restartedMain] INFO  o.a.c.c.StandardEngine - [log,173] - Starting Servlet engine: [Apache Tomcat/9.0.41]
+10:11:58.292 [restartedMain] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring embedded WebApplicationContext
+10:12:00.572 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Starting ProtocolHandler ["http-nio-5063"]
+10:12:00.618 [restartedMain] INFO  c.j.p.WebApplication - [logStarted,61] - Started WebApplication in 7.627 seconds (JVM running for 8.825)
+10:12:01.746 [http-nio-5063-exec-1] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+10:12:46.844 [background-preinit] INFO  o.h.v.i.util.Version - [<clinit>,21] - HV000001: Hibernate Validator 6.0.21.Final
+10:12:47.000 [restartedMain] INFO  c.j.p.WebApplication - [logStarting,55] - Starting WebApplication on DESKTOP-FS89CAQ with PID 16500 (D:\workspace\github\jun_api_service\jun_code_generator\target\classes started by Wujun in D:\workspace\github\jun_api_service\jun_code_generator)
+10:12:47.010 [restartedMain] INFO  c.j.p.WebApplication - [logStartupProfileInfo,655] - The following profiles are active: sqlite
+10:12:51.800 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Initializing ProtocolHandler ["http-nio-5063"]
+10:12:51.802 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Starting service [Tomcat]
+10:12:51.803 [restartedMain] INFO  o.a.c.c.StandardEngine - [log,173] - Starting Servlet engine: [Apache Tomcat/9.0.41]
+10:12:51.973 [restartedMain] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring embedded WebApplicationContext
+10:13:37.472 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Starting ProtocolHandler ["http-nio-5063"]
+10:13:37.712 [restartedMain] INFO  c.j.p.WebApplication - [logStarted,61] - Started WebApplication in 51.76 seconds (JVM running for 53.655)
+10:13:41.165 [http-nio-5063-exec-1] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+10:14:54.253 [background-preinit] INFO  o.h.v.i.util.Version - [<clinit>,21] - HV000001: Hibernate Validator 6.0.21.Final
+10:14:54.376 [restartedMain] INFO  c.j.p.WebApplication - [logStarting,55] - Starting WebApplication on DESKTOP-FS89CAQ with PID 7948 (D:\workspace\github\jun_api_service\jun_code_generator\target\classes started by Wujun in D:\workspace\github\jun_api_service\jun_code_generator)
+10:14:54.378 [restartedMain] INFO  c.j.p.WebApplication - [logStartupProfileInfo,655] - The following profiles are active: mysql
+10:14:59.879 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Initializing ProtocolHandler ["http-nio-8888"]
+10:14:59.880 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Starting service [Tomcat]
+10:14:59.881 [restartedMain] INFO  o.a.c.c.StandardEngine - [log,173] - Starting Servlet engine: [Apache Tomcat/9.0.41]
+10:15:00.092 [restartedMain] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring embedded WebApplicationContext
+10:21:08.925 [background-preinit] INFO  o.h.v.i.util.Version - [<clinit>,21] - HV000001: Hibernate Validator 6.0.21.Final
+10:21:09.014 [restartedMain] INFO  c.j.p.WebApplication - [logStarting,55] - Starting WebApplication on DESKTOP-FS89CAQ with PID 1872 (D:\workspace\github\jun_api_service\jun_code_generator\target\classes started by Wujun in D:\workspace\github\jun_api_service\jun_code_generator)
+10:21:09.017 [restartedMain] INFO  c.j.p.WebApplication - [logStartupProfileInfo,655] - The following profiles are active: mysql
+10:21:12.632 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Initializing ProtocolHandler ["http-nio-8888"]
+10:21:12.636 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Starting service [Tomcat]
+10:21:12.636 [restartedMain] INFO  o.a.c.c.StandardEngine - [log,173] - Starting Servlet engine: [Apache Tomcat/9.0.41]
+10:21:12.774 [restartedMain] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring embedded WebApplicationContext
+10:21:13.537 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Stopping service [Tomcat]
+10:22:40.057 [background-preinit] INFO  o.h.v.i.util.Version - [<clinit>,21] - HV000001: Hibernate Validator 6.0.21.Final
+10:22:40.125 [restartedMain] INFO  c.j.p.WebApplication - [logStarting,55] - Starting WebApplication on DESKTOP-FS89CAQ with PID 15272 (D:\workspace\github\jun_api_service\jun_code_generator\target\classes started by Wujun in D:\workspace\github\jun_api_service\jun_code_generator)
+10:22:40.127 [restartedMain] INFO  c.j.p.WebApplication - [logStartupProfileInfo,655] - The following profiles are active: mysql
+10:22:41.991 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Initializing ProtocolHandler ["http-nio-8888"]
+10:22:41.992 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Starting service [Tomcat]
+10:22:41.992 [restartedMain] INFO  o.a.c.c.StandardEngine - [log,173] - Starting Servlet engine: [Apache Tomcat/9.0.41]
+10:22:42.091 [restartedMain] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring embedded WebApplicationContext
+10:22:42.534 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Stopping service [Tomcat]
+10:24:16.221 [background-preinit] INFO  o.h.v.i.util.Version - [<clinit>,21] - HV000001: Hibernate Validator 6.0.21.Final
+10:24:16.306 [restartedMain] INFO  c.j.p.WebApplication - [logStarting,55] - Starting WebApplication on DESKTOP-FS89CAQ with PID 14264 (D:\workspace\github\jun_api_service\jun_code_generator\target\classes started by Wujun in D:\workspace\github\jun_api_service\jun_code_generator)
+10:24:16.307 [restartedMain] INFO  c.j.p.WebApplication - [logStartupProfileInfo,655] - The following profiles are active: mysql
+10:24:19.914 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Initializing ProtocolHandler ["http-nio-8888"]
+10:24:19.915 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Starting service [Tomcat]
+10:24:19.916 [restartedMain] INFO  o.a.c.c.StandardEngine - [log,173] - Starting Servlet engine: [Apache Tomcat/9.0.41]
+10:24:20.058 [restartedMain] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring embedded WebApplicationContext
+10:24:20.815 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Stopping service [Tomcat]
+10:27:02.726 [background-preinit] INFO  o.h.v.i.util.Version - [<clinit>,21] - HV000001: Hibernate Validator 6.0.21.Final
+10:27:02.780 [restartedMain] INFO  c.j.p.WebApplication - [logStarting,55] - Starting WebApplication on DESKTOP-FS89CAQ with PID 17844 (D:\workspace\github\jun_api_service\jun_code_generator\target\classes started by Wujun in D:\workspace\github\jun_api_service\jun_code_generator)
+10:27:02.781 [restartedMain] INFO  c.j.p.WebApplication - [logStartupProfileInfo,655] - The following profiles are active: mysql
+10:27:06.650 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Initializing ProtocolHandler ["http-nio-8888"]
+10:27:06.651 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Starting service [Tomcat]
+10:27:06.652 [restartedMain] INFO  o.a.c.c.StandardEngine - [log,173] - Starting Servlet engine: [Apache Tomcat/9.0.41]
+10:27:06.778 [restartedMain] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring embedded WebApplicationContext
+10:27:07.305 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Stopping service [Tomcat]
+10:28:41.343 [background-preinit] INFO  o.h.v.i.util.Version - [<clinit>,21] - HV000001: Hibernate Validator 6.0.21.Final
+10:28:41.416 [restartedMain] INFO  c.j.p.WebApplication - [logStarting,55] - Starting WebApplication on DESKTOP-FS89CAQ with PID 14592 (D:\workspace\github\jun_api_service\jun_code_generator\target\classes started by Wujun in D:\workspace\github\jun_api_service\jun_code_generator)
+10:28:41.417 [restartedMain] INFO  c.j.p.WebApplication - [logStartupProfileInfo,655] - The following profiles are active: sqlite
+10:28:45.063 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Initializing ProtocolHandler ["http-nio-8888"]
+10:28:45.064 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Starting service [Tomcat]
+10:28:45.065 [restartedMain] INFO  o.a.c.c.StandardEngine - [log,173] - Starting Servlet engine: [Apache Tomcat/9.0.41]
+10:28:45.223 [restartedMain] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring embedded WebApplicationContext
+10:28:45.836 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Stopping service [Tomcat]
+10:29:27.691 [background-preinit] INFO  o.h.v.i.util.Version - [<clinit>,21] - HV000001: Hibernate Validator 6.0.21.Final
+10:29:27.762 [restartedMain] INFO  c.j.p.WebApplication - [logStarting,55] - Starting WebApplication on DESKTOP-FS89CAQ with PID 2040 (D:\workspace\github\jun_api_service\jun_code_generator\target\classes started by Wujun in D:\workspace\github\jun_api_service\jun_code_generator)
+10:29:27.763 [restartedMain] INFO  c.j.p.WebApplication - [logStartupProfileInfo,655] - The following profiles are active: sqlite
+10:29:31.763 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Initializing ProtocolHandler ["http-nio-8888"]
+10:29:31.767 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Starting service [Tomcat]
+10:29:31.767 [restartedMain] INFO  o.a.c.c.StandardEngine - [log,173] - Starting Servlet engine: [Apache Tomcat/9.0.41]
+10:29:31.985 [restartedMain] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring embedded WebApplicationContext
+10:29:32.534 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Stopping service [Tomcat]
+10:30:12.586 [background-preinit] INFO  o.h.v.i.util.Version - [<clinit>,21] - HV000001: Hibernate Validator 6.0.21.Final
+10:30:12.749 [restartedMain] INFO  c.j.p.WebApplication - [logStarting,55] - Starting WebApplication on DESKTOP-FS89CAQ with PID 16272 (D:\workspace\github\jun_api_service\jun_code_generator\target\classes started by Wujun in D:\workspace\github\jun_api_service\jun_code_generator)
+10:30:12.750 [restartedMain] INFO  c.j.p.WebApplication - [logStartupProfileInfo,655] - The following profiles are active: sqlite
+10:30:16.290 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Initializing ProtocolHandler ["http-nio-8888"]
+10:30:16.292 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Starting service [Tomcat]
+10:30:16.292 [restartedMain] INFO  o.a.c.c.StandardEngine - [log,173] - Starting Servlet engine: [Apache Tomcat/9.0.41]
+10:30:16.433 [restartedMain] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring embedded WebApplicationContext
+10:30:18.782 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Starting ProtocolHandler ["http-nio-8888"]
+10:30:18.838 [restartedMain] INFO  c.j.p.WebApplication - [logStarted,61] - Started WebApplication in 6.838 seconds (JVM running for 8.041)
+10:30:19.897 [http-nio-8888-exec-1] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+10:30:52.802 [http-nio-8888-exec-30] INFO  c.a.d.p.DruidDataSource - [init,985] - {dataSource-1} inited
+10:31:41.012 [http-nio-8888-exec-27] INFO  c.j.p.f.d.DynamicDataSourceContextHolder - [setDataSourceType,26] - 切换到SLAVE2数据源
+10:31:41.028 [http-nio-8888-exec-27] INFO  c.a.d.p.DruidDataSource - [init,985] - {dataSource-2} inited
+10:31:55.406 [http-nio-8888-exec-4] INFO  c.j.p.f.d.DynamicDataSourceContextHolder - [setDataSourceType,26] - 切换到SLAVE2数据源
+10:32:16.651 [http-nio-8888-exec-29] INFO  c.a.d.p.DruidDataSource - [init,985] - {dataSource-3} inited
+10:32:24.559 [http-nio-8888-exec-2] INFO  c.j.p.f.d.DynamicDataSourceContextHolder - [setDataSourceType,26] - 切换到SLAVE2数据源
+10:32:24.567 [http-nio-8888-exec-2] INFO  c.a.d.p.DruidDataSource - [init,985] - {dataSource-4} inited
+10:32:29.967 [http-nio-8888-exec-4] INFO  c.j.p.f.d.DynamicDataSourceContextHolder - [setDataSourceType,26] - 切换到SLAVE2数据源
+10:32:45.928 [http-nio-8888-exec-29] INFO  c.j.p.f.d.DynamicDataSourceContextHolder - [setDataSourceType,26] - 切换到SLAVE2数据源
+10:32:45.963 [http-nio-8888-exec-29] INFO  c.j.p.f.d.DynamicDataSourceContextHolder - [setDataSourceType,26] - 切换到SLAVE2数据源
+10:34:36.960 [http-nio-8888-exec-13] INFO  c.j.p.f.d.DynamicDataSourceContextHolder - [setDataSourceType,26] - 切换到SLAVE2数据源
