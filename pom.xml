@@ -14,9 +14,8 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 	<modules>
-		<module>jun_code_admin</module>
-		<module>jun_freemarker_generator</module>
-		<module>jun_mybatis_generator</module>
+		<module>jun_code_freemarker</module>
+		<module>jun_code_velocity</module>
 	</modules>
 
 	<dependencies>
