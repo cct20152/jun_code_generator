@@ -1,4 +1,4 @@
-package com.jun.plugin.base.core;
+package com.jun.plugin.codegenerator.test;
 
 /**
  * 项目常量

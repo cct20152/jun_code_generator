@@ -1,4 +1,4 @@
-package com.jun.plugin.mybatis;
+package com.jun.plugin.codegenerator.test;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;

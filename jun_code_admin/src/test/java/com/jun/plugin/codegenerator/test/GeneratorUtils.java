@@ -1,5 +1,5 @@
-package com.jun.plugin.mybatis;
-import static com.jun.plugin.mybatis.ProjectConstant.*;
+package com.jun.plugin.codegenerator.test;
+import static com.jun.plugin.codegenerator.test.ProjectConstant.*;
 
 import java.io.File;
 import java.io.FileWriter;
