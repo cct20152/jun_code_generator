@@ -46,7 +46,7 @@ public class CodeGenerator {
         String projectPath = System.getProperty("user.dir");
 //        System.out.println(projectPath);
         gc.setOutputDir(projectPath + "/src/main/java");//生成文件的输出目录【默认 D 盘根目录】
-        gc.setAuthor("liuxzh");//开发人员
+        gc.setAuthor("wujun");//开发人员
         gc.setOpen(false);//是否打开输出目录
         gc.setFileOverride(false);// 是否覆盖已有同名文件，默认是false
         gc.setActiveRecord(true);// 开启 ActiveRecord 模式，默认是false
@@ -70,14 +70,14 @@ public class CodeGenerator {
         //dsc.setSchemaName("public");//PostgreSQL schemaName
         dsc.setDriverName("com.mysql.jdbc.Driver");
         dsc.setUsername("root");
-        dsc.setPassword("123456");
+        dsc.setPassword("");
         mpg.setDataSource(dsc);
 
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(scanner("模块名"));//父包模块名,默认null
         //父包名。如果为空，将下面子包名必须写全部， 否则就只需写子包名
-        pc.setParent("com.mybatisplus.demo");//默认com.baomidou
+        pc.setParent("com.jun.plugin.demo");//默认com.baomidou
         //pc.setController("liuxzhController");//默认controller
         //pc.setService("liuxzhService");//默认service
         //pc.setServiceImpl("liuxzhService.impl");//默认service.impl

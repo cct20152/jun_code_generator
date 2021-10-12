@@ -16,6 +16,7 @@
 	<modules>
 		<module>jun_code_freemarker</module>
 		<module>jun_code_velocity</module>
+		<module>jun_mybatisplus_generator</module>
 	</modules>
 
 	<dependencies>
