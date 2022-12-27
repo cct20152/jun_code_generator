@@ -50,6 +50,13 @@ public class IndexController {
             // code genarete
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("classInfo", classInfo);
+         // genProcessStringWriter(datas, result);
+			params.put("packageController", "com.jun.plugin.biz.controller");
+			params.put("packageService", "com.jun.plugin.biz.service");
+			params.put("packageServiceImpl", "com.jun.plugin.biz.service.impl");
+			params.put("packageDao", "com.jun.plugin.biz.dao");
+			params.put("packageMybatisXML", "com.jun.plugin.biz.model");
+			params.put("packageModel", "com.jun.plugin.biz.model");
 
             // result
             Map<String, String> result = new HashMap<String, String>();
