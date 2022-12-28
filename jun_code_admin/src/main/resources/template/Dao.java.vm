@@ -1,0 +1,21 @@
+/**
+ * Copyright &copy; 2017-2018 <a href="http://www.webcsn.com">webcsn</a> All rights reserved.
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+package ${package}.${moduleName}.dao;
+
+import com.smart.common.IBaseDAO;
+import ${package}.${moduleName}.entity.${className};
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @version 2.0
+ * @date ${datetime}
+ */
+public interface ${className}Mapper extends IBaseDAO<${className}> {
+	
+}

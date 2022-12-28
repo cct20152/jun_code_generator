@@ -1,0 +1,15 @@
+<div class="sm-pop">
+    <div id="dialog_form" class="layui-form">
+        <input type="hidden" name="${pk.attrname}" value="<%=${pk.attrname}%>">
+#foreach($column in $columns)
+#if($column.columnName != $pk.columnName && $column.columnName !='create_user' && $column.columnName !='create_time' && $column.columnName !='update_user' && $column.columnName !='update_time')
+        <div class="layui-form-item">
+            <label class="layui-form-label"><i>*</i> ${column.comments}</label>
+            <div class="layui-input-block">
+                <input type="text" name="${column.attrname}" value="<%=${column.attrname}%>" lay-verify="required" autocomplete="off" placeholder="${column.comments}" class="layui-input">
+            </div>
+        </div>
+#end
+#end
+    </div>
+</div>

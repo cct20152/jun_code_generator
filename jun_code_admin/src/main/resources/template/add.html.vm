@@ -1,0 +1,27 @@
+<div class="sm-pop">
+    <div id="dialog_form" class="layui-form">
+
+        <!--验证规则-->
+        <!--单个：lay-verify="phone" 多个：lay-verify="phone|required"-->
+        <!--所有规则：详见form.js 可扩展-->
+
+
+        <!--最大长度-->
+        <!--maxlength="20"-->
+#foreach($column in $columns)
+#if($column.columnName != $pk.columnName && $column.columnName !='create_user' && $column.columnName !='create_time' && $column.columnName !='update_user' && $column.columnName !='update_time')
+        <div class="layui-form-item">
+            <label class="layui-form-label"><i>*</i>${column.comments}</label>
+            <div class="layui-input-block">
+                <input type="text" autocomplete="off" name="${column.attrname}" lay-verify="required" placeholder="${column.comments}" class="layui-input">
+            </div>
+        </div>
+#end
+#end
+    </div>
+</div>
+<script>
+    layui.use(['form'], function () {
+        // 此处添加js
+    });
+</script>
