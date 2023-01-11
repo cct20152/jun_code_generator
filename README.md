@@ -14,10 +14,7 @@
 
 【jun_api】[ API中心,API注册测试校验管控鉴权中心](https://github.com/wujun728/jun_java_plugin/tree/master/spring_plugin/jun_api)  
 
-
-and so on 
-
-
+ 
 #### 工程截图(组件较多，随意择选了几个)
 
  
