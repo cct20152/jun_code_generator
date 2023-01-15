@@ -28,7 +28,6 @@
 		</dependency>
 	</dependencies>
 
-
 	<profiles>
 		<profile>
 			<id>jdk-1.8</id>
