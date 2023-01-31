@@ -1,4 +1,4 @@
-package com.jun.plugin.codegenerator.test;
+package com.jun.plugin.codegenerator;
 
 import java.io.File;
 import java.io.FileWriter;
