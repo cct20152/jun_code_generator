@@ -1,7 +1,5 @@
 package com.mybatisplus.generator.utils;
 
-
-
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,10 +8,6 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * @author Administrator
- * @date 2018年10月24日 上午11:48:32
- */
 public class StringUtils {
 
     public static boolean chkPass(String str){

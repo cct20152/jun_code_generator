@@ -16,10 +16,7 @@ import java.util.Scanner;
 /**
  * select GROUP_CONCAT(table_name) from information_schema.tables where table_schema='vtis_ycxc' and TABLE_NAME like 'jc_%'
  * 生成工具
- *
  * @author Administrator
- * @Description com.ycxc.vtis - vtis
- * Created by hack2003 on 2019/4/17
  **/
 public class CodeGenerator {
     /**

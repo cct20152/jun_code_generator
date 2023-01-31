@@ -1,4 +1,4 @@
-package other;
+package com.mybatisplus.generator;
 
 /**
  获得当前类的完整路径。最后一句
