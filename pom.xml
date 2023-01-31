@@ -19,7 +19,8 @@
 	<modules>
 		<module>jun_code_freemarker</module>
 		<module>jun_code_velocity</module>
-		<module>jun_mybatisplus_generator</module>
+		<module>jun_code_admin</module>
+		<module>jun_code_admin_v2</module>
 	</modules>
 
 	<dependencies>
