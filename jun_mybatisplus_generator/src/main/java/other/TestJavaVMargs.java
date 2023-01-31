@@ -44,7 +44,7 @@ import java.net.URL;
  user.dir
  */
 
-public class Test {
+public class TestJavaVMargs {
 
     public static void main(String[] args) throws MalformedURLException, URISyntaxException {
 
@@ -70,13 +70,13 @@ public class Test {
 
         System.out.println("===================");
 
-        System.out.println("package: "+Test.class.getPackage().getName());
+        System.out.println("package: "+TestJavaVMargs.class.getPackage().getName());
 
-        System.out.println("package: "+Test.class.getPackage().toString());
+        System.out.println("package: "+TestJavaVMargs.class.getPackage().toString());
 
         System.out.println("=========================");
 
-        String packName = Test.class.getPackage().getName();
+        String packName = TestJavaVMargs.class.getPackage().getName();
 
                 /*URL packurl = new URL(packName);
                 System.out.println(packurl.getPath());*/
@@ -89,7 +89,7 @@ public class Test {
 
         System.out.println(packName.replaceAll("//.", "/"));
 
-        System.out.println(System.getProperty("user.dir")+"/"+(Test.class.getPackage().getName()).replaceAll("//.", "/")+"/");
+        System.out.println(System.getProperty("user.dir")+"/"+(TestJavaVMargs.class.getPackage().getName()).replaceAll("//.", "/")+"/");
 
     }
 
