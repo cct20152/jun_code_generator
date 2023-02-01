@@ -61,4 +61,9 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/com/oracle/ojdbc6/11.2.0.3/ojdbc6-11.2.0.3.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/microsoft/sqlserver/sqljdbc4/4.0/sqljdbc4-4.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/postgresql/postgresql/42.2.5/postgresql-42.2.5.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/baomidou/mybatis-plus/3.4.1/mybatis-plus-3.4.1.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/baomidou/mybatis-plus-generator/3.3.1/mybatis-plus-generator-3.3.1.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/baomidou/mybatis-plus-extension/3.4.1/mybatis-plus-extension-3.4.1.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/baomidou/mybatis-plus-core/3.4.1/mybatis-plus-core-3.4.1.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/baomidou/mybatis-plus-annotation/3.4.1/mybatis-plus-annotation-3.4.1.jar" enabled="true" runInBatchMode="false"/>
 </factorypath>
