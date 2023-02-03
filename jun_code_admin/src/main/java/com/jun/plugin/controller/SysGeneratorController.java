@@ -11,6 +11,7 @@ package com.jun.plugin.controller;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,6 +24,7 @@ import com.jun.plugin.utils.R;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,4 +69,19 @@ public class SysGeneratorController {
   
         IOUtils.write(data, response.getOutputStream());  
 	}
+	
+    /**
+     * 根据表查询表字段详情
+     *
+     * @param tableName
+     * @return
+     * @author fuce
+     * @Date 2019年8月15日 上午1:10:42
+     */
+//    @GetMapping("/queryTableInfo")
+//    @ResponseBody
+//    public ResultTable queryTableInfo(String tableName) {
+//        List<BeanColumn> list = generatorService.queryColumns2(tableName);
+//        return pageTable(list, list.size());
+//    }
 }

@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.jun.plugin.entity.ColumnEntity;
 import com.jun.plugin.entity.TableEntity;
 
+import cn.hutool.core.date.DateTime;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -58,6 +60,27 @@ public class GenUtils {
         templates.add("vm/Controller.java.vm");
         templates.add("vm/menu.sql.vm");
         templates.add("vm/list.html.vm");
+        return templates;
+    }
+    
+    public static List<String> getTemplates3() {
+        List<String> templates = new ArrayList<String>();
+
+        //java代码模板
+        templates.add("auto_code/model/Entity.java.vm");
+        //templates.add("auto_code/model/EntityExample.java.vm");
+        templates.add("auto_code/mapperxml/EntityMapper.xml.vm");
+        templates.add("auto_code/service/EntityService.java.vm");
+        templates.add("auto_code/service/impl/EntityServiceImpl.java.vm");
+        templates.add("auto_code/mapper/EntityMapper.java.vm");
+        templates.add("auto_code/controller/EntityController.java.vm");
+        //前端模板
+        templates.add("auto_code/html/list.html.vm");
+        templates.add("auto_code/html/add.html.vm");
+        templates.add("auto_code/html/edit.html.vm");
+        //sql模板
+        templates.add("auto_code/sql/menu.sql.vm");
+        //templates.add("auto_code/说明.txt.vm");
         return templates;
     }
 
@@ -294,5 +317,53 @@ public class GenUtils {
         }
 
         return null;
+    }
+    
+    
+    /**
+     * 预览方法
+     *
+     * @param tableInfo 数据库表
+     * @return
+     * @author fuce
+     * @Date 2021年1月18日 上午2:10:55
+     */
+	public static Map<String, String> viewAuto(/* TableInfo tableInfo, AutoConfigModel autoConfigModel */) {
+        Map<String, String> velocityMap = new HashMap<String, String>();
+
+        //AutoCodeConfig autoCodeConfig = new AutoCodeConfig();
+        //设置velocity资源加载器
+        Properties prop = new Properties();
+        prop.put("file.resource.loader.class" , "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+        Velocity.init(prop);
+        Map<String, Object> map = new HashMap<>();
+        //数据库表数据
+//        map.put("tableInfo" , tableInfo);
+        //字段集合
+//        map.put("beanColumns" , tableInfo.getBeanColumns());
+        //配置文件
+        map.put("SnowflakeIdWorker" , SnowflakeIdWorker.class);
+        //class类路径
+        //map.put("parentPack" , autoCodeConfig.getConfigkey("parentPack"));
+        //作者
+//        map.put("author" , autoConfigModel.getAuthor());
+        //时间
+        map.put("datetime" , new DateTime());
+        //sql需要的权限父级pid
+//        map.put("pid" , autoConfigModel.getPid());
+
+        VelocityContext velocityContext = new VelocityContext(map);
+        //获取模板列表
+        List<String> templates = getTemplates();
+        for (String template : templates) {
+            Template tpl = Velocity.getTemplate(template, "UTF-8");
+            StringWriter sw = new StringWriter();
+            tpl.merge(velocityContext, sw);
+            System.out.println("输出模板");
+            System.out.println(sw);
+            System.out.println("输出模板 end");
+            velocityMap.put(template.substring(template.lastIndexOf("/") + 1, template.lastIndexOf(".vm")), sw.toString());
+        }
+        return velocityMap;
     }
 }

@@ -19,6 +19,7 @@ package com.jun.plugin.dao;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * 数据库接口
  *
@@ -31,4 +32,11 @@ public interface GeneratorDao {
     Map<String, String> queryTable(String tableName);
 
     List<Map<String, String>> queryColumns(String tableName);
-}
+    
+	 /**
+	  * 查询表详情
+	  * @param tableName
+	  * @return
+	  */
+	 List<Map<String, String>> queryColumns2(String tableName);
+	 List<Map<String, String>> queryColumns3(String tableName);}

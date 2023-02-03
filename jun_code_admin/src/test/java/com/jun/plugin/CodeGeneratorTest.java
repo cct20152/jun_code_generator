@@ -62,7 +62,7 @@ public class CodeGeneratorTest {
 //    	String tables = "hr_templet_assessment,hr_templet_assessment_userscore,hr_templet_quota_detail,hr_templet_quota_detail_userscore_detail";
 //    	
     	byte[] data = sysGeneratorService.generatorCode(tables.split(","),"com.jun.plugin.bizservice","test","wujun728@mail.com");
-    	FileUtils.writeByteArrayToFile(new File("D:/"+1111+"1202"+(new Random().nextInt(999))+".zip"), data);
+    	FileUtils.writeByteArrayToFile(new File("D:/"+1111+"66666"+(new Random().nextInt(999))+".zip"), data);
     	//log.info("代码生成成功！");
     }
     
