@@ -14,13 +14,13 @@ import org.springframework.core.env.Environment;
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @SpringBootApplication(exclude= {DataSourceAutoConfiguration.class})
-public class Application  extends SpringBootServletInitializer  {
+public class SpringCodeGeneratorApplication  extends SpringBootServletInitializer  {
 
 	public static void main(String[] args) throws Exception {
 //      SpringApplication application = new SpringApplication(SpringbootApplication.class);
 //		application.setBannerMode(Banner.Mode.OFF);
 //		application.run(args);
-		ConfigurableApplicationContext application = SpringApplication.run(Application.class, args);
+		ConfigurableApplicationContext application = SpringApplication.run(SpringCodeGeneratorApplication.class, args);
 		Environment env = application.getEnvironment();
 		InetAddress inetAddress = Inet4Address.getLocalHost();
 		String hostAddress = inetAddress.getHostAddress();
