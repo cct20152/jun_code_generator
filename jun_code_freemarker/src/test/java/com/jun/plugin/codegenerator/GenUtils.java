@@ -26,7 +26,6 @@ import org.apache.commons.lang3.StringUtils;
  * @date 2020年3月18日
  */
 public class GenUtils {
-	
 
 	public static Properties props = new Properties(); // 配置文件
 	static {
@@ -46,25 +45,23 @@ public class GenUtils {
 
     public static List<String> getTemplates() {
         List<String> templates = Lists.newArrayList();
-        templates.add("code-generator/controller.ftl");
-        templates.add("code-generator/service.ftl");
-        templates.add("code-generator/service_impl.ftl");
-        templates.add("code-generator/dao.ftl");
-        templates.add("code-generator/mybatis.ftl");
+//        templates.add("code-generator/controller.ftl");
+//        templates.add("code-generator/service.ftl");
+//        templates.add("code-generator/service_impl.ftl");
+//        templates.add("code-generator/dao.ftl");
+//        templates.add("code-generator/mybatis.ftl");
+//        templates.add("code-generator/model.ftl");
         templates.add("code-generator/model.ftl");
-//        templates.add("code-generator/menu.sql.vm");
-//        templates.add("code-generator/list.html.vm");
-
         return templates;
     }
     public static Map<String, Object> getPackages() {
     	Map<String, Object> datas = new HashMap<String, Object>();
-    	datas.put("packageController", "com.jun.plugin.biz.controller");
-		datas.put("packageService", "com.jun.plugin.biz.service");
-		datas.put("packageServiceImpl", "com.jun.plugin.biz.service.impl");
-		datas.put("packageDao", "com.jun.plugin.biz.dao");
-		datas.put("packageMybatisXML", "com.jun.plugin.biz.model");
-		datas.put("packageModel", "com.jun.plugin.biz.model");
+//    	datas.put("packageController", "com.jun.plugin.biz.controller");
+//		datas.put("packageService", "com.jun.plugin.biz.service");
+//		datas.put("packageServiceImpl", "com.jun.plugin.biz.service.impl");
+//		datas.put("packageDao", "com.jun.plugin.biz.dao");
+//		datas.put("packageMybatisXML", "com.jun.plugin.biz.model");
+//		datas.put("packageModel", "com.jun.plugin.biz.model");
     	return datas;
     }
     
