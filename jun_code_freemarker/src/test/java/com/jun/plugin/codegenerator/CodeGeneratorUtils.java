@@ -46,7 +46,7 @@ public class CodeGeneratorUtils {
 	private static final Logger logger = LoggerFactory.getLogger(CodeGeneratorUtils.class);
 	
 	public static void main(String[] args) throws Exception {
-		genTables(new String[]{"app_info","app_env"});
+		genTables(new String[] { "test"/* ,"app_env" */});
 	}
 
 
@@ -55,7 +55,17 @@ public class CodeGeneratorUtils {
 		classInfos.forEach(classInfo -> {
 			Map<String, Object> datas = new HashMap<String, Object>();
 			datas.put("classInfo", classInfo);
-			datas.putAll(GenUtils.getPackages());
+//			datas.putAll(GenUtils.getPackages());
+			datas.put("authorName","wujun");
+			datas.put("isLombok",true);
+			datas.put("isAutoImport",true);
+			datas.put("isWithPackage",true);
+			datas.put("isSwagger",true);
+			datas.put("isComment",true);
+			datas.put("packageName","com.jun.plugin.biz");
+			datas.put("returnUtilFailure","【returnUtilFailure】");
+			datas.put("returnUtilSuccess","【returnUtilSuccess】");
+			datas.put("returnUtil","【returnUtil】");
 			Map<String, String> result = new HashMap<String, String>();
 			try {
 				//processTemplatesStringWriter(datas, result);
@@ -170,7 +180,7 @@ public class CodeGeneratorUtils {
 						}
 						// V1 初始化数据及对象 模板V1 field List
 						List<FieldInfo> fieldList = new ArrayList<FieldInfo>();
-						
+//						cn.hutool.db.meta.Table
 						while (cloumnsSet.next()) {
 							String remarks = cloumnsSet.getString("REMARKS");// 列的描述
 							String columnName = cloumnsSet.getString("COLUMN_NAME"); // 获取列名

@@ -10,6 +10,10 @@ public class FieldInfo {
     private String fieldName;
     private String fieldClass;
     private String fieldComment;
+    private Boolean isPrimaryKey;
+    private int columnSize;
+    private Boolean nullable;
+    private Boolean comment;
 
     public String getColumnName() {
         return columnName;
@@ -42,5 +46,14 @@ public class FieldInfo {
     public void setFieldComment(String fieldComment) {
         this.fieldComment = fieldComment;
     }
+
+	public Boolean getIsPrimaryKey() {
+		return isPrimaryKey;
+	}
+
+	public void setIsPrimaryKey(Boolean isPrimaryKey) {
+		this.isPrimaryKey = isPrimaryKey;
+	}
+
 
 }

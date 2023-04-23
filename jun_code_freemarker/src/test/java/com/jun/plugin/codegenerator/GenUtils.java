@@ -4,6 +4,10 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.google.common.collect.Lists;
 import com.jun.plugin.codegenerator.admin.core.model.ClassInfo;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.setting.dialect.PropsUtil;
+import cn.hutool.setting.yaml.YamlUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,28 +55,51 @@ public class GenUtils {
 //        templates.add("code-generator/dao.ftl");
 //        templates.add("code-generator/mybatis.ftl");
 //        templates.add("code-generator/model.ftl");
-        templates.add("code-generator/model.ftl");
+        // ************************************************************************************
+        templates.add("code-generator/mybatis-plus-v2/plus-controller.ftl");
+        templates.add("code-generator/mybatis-plus-v2/plus-entity.ftl");
+        templates.add("code-generator/mybatis-plus-v2/plus-mapper.ftl");
+        templates.add("code-generator/mybatis-plus-v2/plus-service.ftl");
+        templates.add("code-generator/mybatis-plus-v2/plus-dto.ftl");
+        templates.add("code-generator/mybatis-plus-v2/plus-vo.ftl");
+        templates.add("code-generator/mybatis-plus-v2/plus-serviceimpl.ftl");
         return templates;
     }
-    public static Map<String, Object> getPackages() {
-    	Map<String, Object> datas = new HashMap<String, Object>();
+//    public static Map<String, Object> getPackages() {
+//    	Map<String, Object> datas = new HashMap<String, Object>();
+////    	datas.put("packageController", "com.jun.plugin.biz.controller");
+////		datas.put("packageService", "com.jun.plugin.biz.service");
+////		datas.put("packageServiceImpl", "com.jun.plugin.biz.service.impl");
+////		datas.put("packageDao", "com.jun.plugin.biz.dao");
+////		datas.put("packageMybatisXML", "com.jun.plugin.biz.model");
+////		datas.put("packageModel", "com.jun.plugin.biz.model");
+//    	// ************************************************************************************
 //    	datas.put("packageController", "com.jun.plugin.biz.controller");
+//    	datas.put("packageModel", "com.jun.plugin.biz.entity");
+//    	datas.put("packageMapper", "com.jun.plugin.biz.mapper");
 //		datas.put("packageService", "com.jun.plugin.biz.service");
-//		datas.put("packageServiceImpl", "com.jun.plugin.biz.service.impl");
-//		datas.put("packageDao", "com.jun.plugin.biz.dao");
-//		datas.put("packageMybatisXML", "com.jun.plugin.biz.model");
-//		datas.put("packageModel", "com.jun.plugin.biz.model");
-    	return datas;
-    }
+//		datas.put("packageDTO", "com.jun.plugin.biz.dto");
+//		datas.put("packageVO", "com.jun.plugin.biz.vo");
+//		datas.put("packageService", "com.jun.plugin.biz.service.impl");
+//    	return datas;
+//    }
     
     public static List<String> getFilePaths(ClassInfo classInfo) {
         List<String> filePaths = new ArrayList<>();
+//        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.controller") + classInfo.getClassName() + "Controller.java");
+//        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.service") + classInfo.getClassName() + "Service.java");
+//		filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.service.impl") + classInfo.getClassName() + "ServiceImpl.java");
+//		filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.dao") + classInfo.getClassName() + "Dao.java");
+//		filePaths.add(PROJECT_PATH + RESOURCES_PATH + "/mybatis/" + classInfo.getClassName() + ".xml");
+//		filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.model") + classInfo.getClassName() + ".java");
+     // ************************************************************************************
         filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.controller") + classInfo.getClassName() + "Controller.java");
+        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.entity") + classInfo.getClassName() + "Entity.java");
+        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.mapper") + classInfo.getClassName() + "Mapper.java");
         filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.service") + classInfo.getClassName() + "Service.java");
-		filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.service.impl") + classInfo.getClassName() + "ServiceImpl.java");
-		filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.dao") + classInfo.getClassName() + "Dao.java");
-		filePaths.add(PROJECT_PATH + RESOURCES_PATH + "/mybatis/" + classInfo.getClassName() + ".xml");
-		filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.model") + classInfo.getClassName() + ".java");
+        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.dto") + classInfo.getClassName() + "DTO.java");
+        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.vo") + classInfo.getClassName() + "VO.java");
+        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.service.impl") + classInfo.getClassName() + "ServiceImpl.java");
         return filePaths;
     }
     
