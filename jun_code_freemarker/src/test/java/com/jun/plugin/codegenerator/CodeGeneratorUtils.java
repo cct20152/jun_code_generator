@@ -27,6 +27,8 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.jun.plugin.codegenerator.admin.core.model.ClassInfo;
 import com.jun.plugin.codegenerator.admin.core.model.FieldInfo;
 
+import cn.hutool.core.io.unit.DataSize;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.db.meta.MetaUtil;
 import cn.hutool.db.meta.Table;
@@ -42,11 +44,10 @@ import freemarker.template.TemplateExceptionHandler;
  */
 public class CodeGeneratorUtils {
 	private static final Logger logger = LoggerFactory.getLogger(CodeGeneratorUtils.class);
-
-	private static final String PROJECT_PATH = System.getProperty("user.dir");// 项目在硬盘上的基础路径，项目路径
-	private static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates";// 模板位置
-	private static final String JAVA_PATH = "/src/main/java"; // java文件路径
-	private static final String RESOURCES_PATH = "/src/main/resources";// 资源文件路径
+//	private static final String PROJECT_PATH = System.getProperty("user.dir");// 项目在硬盘上的基础路径，项目路径
+//	private static final String JAVA_PATH = "/src/main/java"; // java文件路径
+//	private static final String RESOURCES_PATH = "/src/main/resources";// 资源文件路径
+//	private static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates";// 模板位置
 	private static Properties props = new Properties(); // 配置文件
 	static {
 		try {
@@ -86,17 +87,18 @@ public class CodeGeneratorUtils {
 		classInfos.forEach(classInfo -> {
 			Map<String, Object> datas = new HashMap<String, Object>();
 			datas.put("classInfo", classInfo);
+			datas.putAll(GenUtils.getPackages());
 			Map<String, String> result = new HashMap<String, String>();
 			try {
 				// genProcessStringWriter(datas, result);
-				datas.put("packageController", "com.jun.plugin.biz.controller");
-				datas.put("packageService", "com.jun.plugin.biz.service");
-				datas.put("packageServiceImpl", "com.jun.plugin.biz.service.impl");
-				datas.put("packageDao", "com.jun.plugin.biz.dao");
-				datas.put("packageMybatisXML", "com.jun.plugin.biz.model");
-				datas.put("packageModel", "com.jun.plugin.biz.model");
+//				datas.put("packageController", "com.jun.plugin.biz.controller");
+//				datas.put("packageService", "com.jun.plugin.biz.service");
+//				datas.put("packageServiceImpl", "com.jun.plugin.biz.service.impl");
+//				datas.put("packageDao", "com.jun.plugin.biz.dao");
+//				datas.put("packageMybatisXML", "com.jun.plugin.biz.model");
+//				datas.put("packageModel", "com.jun.plugin.biz.model");
 
-				genCRUD(classInfo, datas);
+				processTemplates(classInfo, datas);
 //				genJdbcTemplate(classInfo, datas);
 
 			} catch (IOException e) {
@@ -116,49 +118,13 @@ public class CodeGeneratorUtils {
 
 	}
 
-	public static void genCRUD(ClassInfo classInfo, Map<String, Object> datas) throws IOException, TemplateException {
-		String filePath;
-		// 生成 controller.ftl
-		filePath = PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.controller") + classInfo.getClassName()
-				+ "Controller.java";
-		CodeGeneratorUtils.processFile("code-generator/controller.ftl", datas, filePath);
-
-		// 生成 service.ftl
-		filePath = PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.service") + classInfo.getClassName()
-				+ "Service.java";
-		CodeGeneratorUtils.processFile("code-generator/service.ftl", datas, filePath);
-
-		// 生成 service_impl.ftl
-		filePath = PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.service.impl") + classInfo.getClassName()
-				+ "ServiceImpl.java";
-		CodeGeneratorUtils.processFile("code-generator/service_impl.ftl", datas, filePath);
-
-		// 生成 dao.ftl
-		filePath = PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.dao") + classInfo.getClassName()
-				+ "Dao.java";
-		CodeGeneratorUtils.processFile("code-generator/dao.ftl", datas, filePath);
-
-		// 生成 mybatis.ftl
-		filePath = PROJECT_PATH + RESOURCES_PATH + "/mybatis/" + classInfo.getClassName() + ".xml";
-		CodeGeneratorUtils.processFile("code-generator/mybatis.ftl", datas, filePath);
-
-		// 生成 model.ftl
-		filePath = PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.model") + classInfo.getClassName()
-				+ ".java";
-		CodeGeneratorUtils.processFile("code-generator/model.ftl", datas, filePath);
+	public static void processTemplates(ClassInfo classInfo, Map<String, Object> datas) throws IOException, TemplateException {
+		List<String> templates = GenUtils.getTemplates();
+		for(int i = 0 ; i < templates.size() ; i++) {
+			CodeGeneratorUtils.processFile(templates.get(i), datas, GenUtils.getFilePaths(classInfo).get(i));
+		}
 	}
 
-	private static void genJdbcTemplate(ClassInfo classInfo, Map<String, Object> datas)
-			throws IOException, TemplateException {
-		String filePath;
-		filePath = PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.jtdao") + classInfo.getClassName()
-				+ "DAO.java";
-		CodeGeneratorUtils.processFile("code-generator/jdbc-template/jtdao.ftl", datas, filePath);
-
-		filePath = PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.jtdao.impl") + classInfo.getClassName()
-				+ "DaoImpl.java";
-		CodeGeneratorUtils.processFile("code-generator/jdbc-template/jtdaoimpl.ftl", datas, filePath);
-	}
 
 	public static void processFile(String templateName, Map<String, Object> data, String filePath)
 			throws IOException, TemplateException {
@@ -192,15 +158,12 @@ public class CodeGeneratorUtils {
 	private static freemarker.template.Configuration getConfiguration() throws IOException {
 		freemarker.template.Configuration cfg = new freemarker.template.Configuration(
 				freemarker.template.Configuration.VERSION_2_3_23);
-		cfg.setDirectoryForTemplateLoading(new File(TEMPLATE_FILE_PATH));
+		cfg.setDirectoryForTemplateLoading(new File(GenUtils.TEMPLATE_FILE_PATH));
 		cfg.setDefaultEncoding("UTF-8");
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);
 		return cfg;
 	}
 
-	private static String package2Path(String packageName) {
-		return String.format("/%s/", packageName.contains(".") ? packageName.replaceAll("\\.", "/") : packageName);
-	}
 
 	/***
 	 * 模板构建，
@@ -537,11 +500,11 @@ public class CodeGeneratorUtils {
 					String path = null;
 					if (templateFileNameSuffix.equalsIgnoreCase(".java")) {
 						// 创建文件夹
-						path = CodeGeneratorUtils.PROJECT_PATH + "/" + props.getProperty("basePackage").replace(".", "/")
+						path = GenUtils.PROJECT_PATH + "/" + props.getProperty("basePackage").replace(".", "/")
 								+ "/" + templateFileNamePrefix.toLowerCase();
 					}
 					if (templateFileNameSuffix.equalsIgnoreCase(".ftl")) {
-						path = CodeGeneratorUtils.PROJECT_PATH + "/" + props.getProperty("basePackage").replace(".", "/")
+						path = GenUtils.PROJECT_PATH + "/" + props.getProperty("basePackage").replace(".", "/")
 								+ "/" + templateFilePathMiddle + "/";
 					}
 					String fileNameNew = templateFileNamePrefix
