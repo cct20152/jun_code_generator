@@ -23,9 +23,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.jun.plugin.codegenerator.admin.core.model.ClassInfo;
 import com.jun.plugin.codegenerator.admin.core.model.FieldInfo;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.db.meta.MetaUtil;
+import cn.hutool.db.meta.Table;
+import cn.hutool.db.meta.TableType;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
@@ -53,31 +58,31 @@ public class CodeGeneratorUtils {
 		}
 	}
 	
-	public static String PACKAGE_POJO = props.getProperty("pojoPackage");
-	public static String PACKAGE_MAPPER = props.getProperty("mapperPackage");
-	public static String PACKAGE_BASE = props.getProperty("basePackage");
-	public static String PACKAGE_SERVICE_INTERFACE = props.getProperty("serviceInterfacePackage");
-	public static String PACKAGE_SERVICE_INTERFACE_IMPL = props.getProperty("serviceInterfaceImplPackage");
-	public static String PACKAGE_CONTROLLER = props.getProperty("controllerPackage");
-	public static String PACKAGE_FEIGN = props.getProperty("feignPackage");
-	public static String UNAME = props.getProperty("uname");
-	public static Boolean SWAGGER = Boolean.valueOf(props.getProperty("enableSwagger"));
-	public static String SERVICENAME = props.getProperty("serviceName");
-	public static String SWAGGERUI_PATH = props.getProperty("swaggeruipath");
-	public static String TEMPLATE_PATH = CodeGeneratorUtils.class.getClassLoader().getResource("").getPath()
-			.replace("/target/classes/", "") + "/src/main/resources/" + props.getProperty("template_path");
-	public static String TEMPLATE_NAME = props.getProperty("template_path");
-	public static String TABLEREMOVEPREFIXES = props.getProperty("tableRemovePrefixes");
-	public static String ROWREMOVEPREFIXES = props.getProperty("rowRemovePrefixes");
-	public static String SKIPTABLE = props.getProperty("skipTable");
-	public static String INCLUETABLES = props.getProperty("inclueTables");
+//	public static String PACKAGE_POJO = props.getProperty("pojoPackage");
+//	public static String PACKAGE_MAPPER = props.getProperty("mapperPackage");
+//	public static String PACKAGE_BASE = props.getProperty("basePackage");
+//	public static String PACKAGE_SERVICE_INTERFACE = props.getProperty("serviceInterfacePackage");
+//	public static String PACKAGE_SERVICE_INTERFACE_IMPL = props.getProperty("serviceInterfaceImplPackage");
+//	public static String PACKAGE_CONTROLLER = props.getProperty("controllerPackage");
+//	public static String PACKAGE_FEIGN = props.getProperty("feignPackage");
+//	public static String UNAME = props.getProperty("uname");
+//	public static Boolean SWAGGER = Boolean.valueOf(props.getProperty("enableSwagger"));
+//	public static String SERVICENAME = props.getProperty("serviceName");
+//	public static String SWAGGERUI_PATH = props.getProperty("swaggeruipath");
+//	public static String TEMPLATE_PATH = CodeGeneratorUtils.class.getClassLoader().getResource("").getPath()
+//			.replace("/target/classes/", "") + "/src/main/resources/" + props.getProperty("template_path");
+//	public static String TEMPLATE_NAME = props.getProperty("template_path");
+//	public static String TABLEREMOVEPREFIXES = props.getProperty("tableRemovePrefixes");
+//	public static String ROWREMOVEPREFIXES = props.getProperty("rowRemovePrefixes");
+//	public static String SKIPTABLE = props.getProperty("skipTable");
+//	public static String INCLUETABLES = props.getProperty("inclueTables");
 
 	public static void main(String[] args) throws Exception {
-		genAllTeamplaters();
+		genAllTeamplaters(new String[]{"app_info","app_env"});
 	}
 
-	public static void genAllTeamplaters() throws Exception {
-		List<ClassInfo> classInfos = CodeGeneratorUtils.processMetadataClassInfo(null);
+	public static void genAllTeamplaters(String [] tables) throws Exception {
+		List<ClassInfo> classInfos = CodeGeneratorUtils.getClassInfo(tables);
 		classInfos.forEach(classInfo -> {
 			Map<String, Object> datas = new HashMap<String, Object>();
 			datas.put("classInfo", classInfo);
@@ -211,90 +216,166 @@ public class CodeGeneratorUtils {
 		System.out.println(result);
 	}
 
-	public static List<ClassInfo> processMetadataClassInfo(String tablename) throws IOException {
-		List<ClassInfo> list = new ArrayList<ClassInfo>();
-		CodeGeneratorUtils.builderClassInfo(list);
-		return list;
-	}
-
 	/***
 	 * 数据构建 ClassInfo
 	 */
-	public static void builderClassInfo(List<ClassInfo> list) {
+	public static List<ClassInfo> getClassInfoNew(String[] tables) {
+		List<ClassInfo> list = new ArrayList<ClassInfo>();
 		try {
-			Connection conn = DriverManager.getConnection(props.getProperty("url"), props.getProperty("uname"),
-					props.getProperty("pwd"));
+			DruidDataSource dataSource = new DruidDataSource();
+			dataSource.setUrl(props.getProperty("url"));
+			dataSource.setUsername(props.getProperty("uname"));
+			dataSource.setPassword(props.getProperty("pwd"));
+			Connection conn = dataSource.getConnection();
 			DatabaseMetaData metaData = conn.getMetaData();
 			String databaseType = metaData.getDatabaseProductName(); // 获取数据库类型：MySQL
-
+			List<String> tableNames = MetaUtil.getTables(dataSource,"lcp-dev",TableType.TABLE);
 			// 针对MySQL数据库进行相关生成操作
 			if (databaseType.equals("MySQL")) {
 				ResultSet tableResultSet = metaData.getTables(null, "%", "%", new String[] { "TABLE" }); // 获取所有表结构
 				String database = conn.getCatalog(); // 获取数据库名字
 
 				while (tableResultSet.next()) { // 循环所有表信息
-
 					String tableName = tableResultSet.getString("TABLE_NAME"); // 获取表名
-					String table = CodeGeneratorUtils.replace_(CodeGeneratorUtils.replaceTabblePreStr(tableName)); // 名字操作,去掉tab_,tb_，去掉_并转驼峰
-					String Table = CodeGeneratorUtils.firstUpper(table); // 获取表名,首字母大写
-					String tableComment = tableResultSet.getString("REMARKS"); // 获取表备注
-					String className = CodeGeneratorUtils.replace_(CodeGeneratorUtils.replaceTabblePreStr(tableName)); // 名字操作,去掉tab_,tb_，去掉_并转驼峰
-					String classNameFirstUpper = CodeGeneratorUtils.firstUpper(className); // 大写对象
-//					showTableInfo(tableResultSet); 
-					logger.info("当前表名：" + tableName);
-
-					Set<String> typeSet = new HashSet<String>(); // 所有需要导包的类型
-					ResultSet cloumnsSet = metaData.getColumns(database, UNAME, tableName, null); // 获取表所有的列
-					ResultSet keySet = metaData.getPrimaryKeys(database, UNAME, tableName); // 获取主键
-					String key = "", keyType = "";
-					while (keySet.next()) {
-						key = keySet.getString(4);
-					}
-					// V1 初始化数据及对象 模板V1 field List
-					List<FieldInfo> fieldList = new ArrayList<FieldInfo>();
-
-					while (cloumnsSet.next()) {
-						String remarks = cloumnsSet.getString("REMARKS");// 列的描述
-						String columnName = cloumnsSet.getString("COLUMN_NAME"); // 获取列名
-						String javaType = CodeGeneratorUtils.getType(cloumnsSet.getInt("DATA_TYPE"));// 获取类型，并转成JavaType
-						int COLUMN_SIZE = cloumnsSet.getInt("COLUMN_SIZE");// 获取
-						String TABLE_SCHEM = cloumnsSet.getString("TABLE_SCHEM");// 获取
-						String COLUMN_DEF = cloumnsSet.getString("COLUMN_DEF");// 获取
-						int NULLABLE = cloumnsSet.getInt("NULLABLE");// 获取
-						// showColumnInfo(cloumnsSet);
-						String propertyName = CodeGeneratorUtils.replace_(CodeGeneratorUtils.replaceRow(columnName));// 处理列名，驼峰
-						typeSet.add(javaType);// 需要导包的类型
-						if (columnName.equals(key)) {
-							keyType = CodeGeneratorUtils.simpleName(javaType);// 主键类型,单主键支持
+					if( tables == null  || ArrayUtil.containsIgnoreCase(tables, tableName)) {
+						Table tab = MetaUtil.getTableMeta(dataSource, databaseType);
+						
+						String table = CodeGeneratorUtils.replace_(CodeGeneratorUtils.replaceTabblePreStr(tableName)); // 名字操作,去掉tab_,tb_，去掉_并转驼峰
+						String Table = CodeGeneratorUtils.firstUpper(table); // 获取表名,首字母大写
+						String tableComment = tableResultSet.getString("REMARKS"); // 获取表备注
+						String className = CodeGeneratorUtils.replace_(CodeGeneratorUtils.replaceTabblePreStr(tableName)); // 名字操作,去掉tab_,tb_，去掉_并转驼峰
+						String classNameFirstUpper = CodeGeneratorUtils.firstUpper(className); // 大写对象
+//						showTableInfo(tableResultSet); 
+						logger.info("当前表名：" + tableName);
+						
+						Set<String> typeSet = new HashSet<String>(); // 所有需要导包的类型
+						ResultSet cloumnsSet = metaData.getColumns(database, props.getProperty("uname"), tableName, null); // 获取表所有的列
+						ResultSet keySet = metaData.getPrimaryKeys(database, props.getProperty("uname"), tableName); // 获取主键
+						String key = "", keyType = "";
+						while (keySet.next()) {
+							key = keySet.getString(4);
 						}
-						// V1 初始化数据及对象
-						FieldInfo fieldInfo = new FieldInfo();
-						fieldInfo.setColumnName(columnName);
-						fieldInfo.setFieldName(propertyName);
-						fieldInfo.setFieldClass(CodeGeneratorUtils.simpleName(javaType));
-						fieldInfo.setFieldComment(remarks);
-						fieldList.add(fieldInfo);
+						// V1 初始化数据及对象 模板V1 field List
+						List<FieldInfo> fieldList = new ArrayList<FieldInfo>();
+						
+						while (cloumnsSet.next()) {
+							String remarks = cloumnsSet.getString("REMARKS");// 列的描述
+							String columnName = cloumnsSet.getString("COLUMN_NAME"); // 获取列名
+							String javaType = CodeGeneratorUtils.getType(cloumnsSet.getInt("DATA_TYPE"));// 获取类型，并转成JavaType
+							int COLUMN_SIZE = cloumnsSet.getInt("COLUMN_SIZE");// 获取
+							String TABLE_SCHEM = cloumnsSet.getString("TABLE_SCHEM");// 获取
+							String COLUMN_DEF = cloumnsSet.getString("COLUMN_DEF");// 获取
+							int NULLABLE = cloumnsSet.getInt("NULLABLE");// 获取
+							// showColumnInfo(cloumnsSet);
+							String propertyName = CodeGeneratorUtils.replace_(CodeGeneratorUtils.replaceRow(columnName));// 处理列名，驼峰
+							typeSet.add(javaType);// 需要导包的类型
+							if (columnName.equals(key)) {
+								keyType = CodeGeneratorUtils.simpleName(javaType);// 主键类型,单主键支持
+							}
+							// V1 初始化数据及对象
+							FieldInfo fieldInfo = new FieldInfo();
+							fieldInfo.setColumnName(columnName);
+							fieldInfo.setFieldName(propertyName);
+							fieldInfo.setFieldClass(CodeGeneratorUtils.simpleName(javaType));
+							fieldInfo.setFieldComment(remarks);
+							fieldList.add(fieldInfo);
+						}
+						// ************************************************************************
+						if (fieldList != null && fieldList.size() > 0) {
+							ClassInfo classInfo = new ClassInfo();
+							classInfo.setTableName(tableName);
+							classInfo.setClassName(classNameFirstUpper);
+							classInfo.setClassComment(tableComment);
+							classInfo.setFieldList(fieldList);
+							list.add(classInfo);
+						}
+						// ************************************************************************
 					}
-					// ************************************************************************
-					if (fieldList != null && fieldList.size() > 0) {
-						ClassInfo classInfo = new ClassInfo();
-						classInfo.setTableName(tableName);
-						classInfo.setClassName(classNameFirstUpper);
-						classInfo.setClassComment(tableComment);
-						classInfo.setFieldList(fieldList);
-						list.add(classInfo);
-					}
-					// ************************************************************************
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return list;
+	}
+	
+	public static List<ClassInfo> getClassInfo(String[] tables) {
+		List<ClassInfo> list = new ArrayList<ClassInfo>();
+		try {
+			Connection conn = DriverManager.getConnection(props.getProperty("url"), props.getProperty("uname"),
+					props.getProperty("pwd"));
+			DatabaseMetaData metaData = conn.getMetaData();
+			String databaseType = metaData.getDatabaseProductName(); // 获取数据库类型：MySQL
+			// 针对MySQL数据库进行相关生成操作
+			if (databaseType.equals("MySQL")) {
+				ResultSet tableResultSet = metaData.getTables(null, "%", "%", new String[] { "TABLE" }); // 获取所有表结构
+				String database = conn.getCatalog(); // 获取数据库名字
+
+				while (tableResultSet.next()) { // 循环所有表信息
+					String tableName = tableResultSet.getString("TABLE_NAME"); // 获取表名
+					if( tables == null  || ArrayUtil.containsIgnoreCase(tables, tableName)) {
+						String table = CodeGeneratorUtils.replace_(CodeGeneratorUtils.replaceTabblePreStr(tableName)); // 名字操作,去掉tab_,tb_，去掉_并转驼峰
+						String Table = CodeGeneratorUtils.firstUpper(table); // 获取表名,首字母大写
+						String tableComment = tableResultSet.getString("REMARKS"); // 获取表备注
+						String className = CodeGeneratorUtils.replace_(CodeGeneratorUtils.replaceTabblePreStr(tableName)); // 名字操作,去掉tab_,tb_，去掉_并转驼峰
+						String classNameFirstUpper = CodeGeneratorUtils.firstUpper(className); // 大写对象
+//						showTableInfo(tableResultSet); 
+						logger.info("当前表名：" + tableName);
+						
+						Set<String> typeSet = new HashSet<String>(); // 所有需要导包的类型
+						ResultSet cloumnsSet = metaData.getColumns(database, props.getProperty("uname"), tableName, null); // 获取表所有的列
+						ResultSet keySet = metaData.getPrimaryKeys(database, props.getProperty("uname"), tableName); // 获取主键
+						String key = "", keyType = "";
+						while (keySet.next()) {
+							key = keySet.getString(4);
+						}
+						// V1 初始化数据及对象 模板V1 field List
+						List<FieldInfo> fieldList = new ArrayList<FieldInfo>();
+						
+						while (cloumnsSet.next()) {
+							String remarks = cloumnsSet.getString("REMARKS");// 列的描述
+							String columnName = cloumnsSet.getString("COLUMN_NAME"); // 获取列名
+							String javaType = CodeGeneratorUtils.getType(cloumnsSet.getInt("DATA_TYPE"));// 获取类型，并转成JavaType
+							int COLUMN_SIZE = cloumnsSet.getInt("COLUMN_SIZE");// 获取
+							String TABLE_SCHEM = cloumnsSet.getString("TABLE_SCHEM");// 获取
+							String COLUMN_DEF = cloumnsSet.getString("COLUMN_DEF");// 获取
+							int NULLABLE = cloumnsSet.getInt("NULLABLE");// 获取
+							// showColumnInfo(cloumnsSet);
+							String propertyName = CodeGeneratorUtils.replace_(CodeGeneratorUtils.replaceRow(columnName));// 处理列名，驼峰
+							typeSet.add(javaType);// 需要导包的类型
+							if (columnName.equals(key)) {
+								keyType = CodeGeneratorUtils.simpleName(javaType);// 主键类型,单主键支持
+							}
+							// V1 初始化数据及对象
+							FieldInfo fieldInfo = new FieldInfo();
+							fieldInfo.setColumnName(columnName);
+							fieldInfo.setFieldName(propertyName);
+							fieldInfo.setFieldClass(CodeGeneratorUtils.simpleName(javaType));
+							fieldInfo.setFieldComment(remarks);
+							fieldList.add(fieldInfo);
+						}
+						// ************************************************************************
+						if (fieldList != null && fieldList.size() > 0) {
+							ClassInfo classInfo = new ClassInfo();
+							classInfo.setTableName(tableName);
+							classInfo.setClassName(classNameFirstUpper);
+							classInfo.setClassComment(tableComment);
+							classInfo.setFieldList(fieldList);
+							list.add(classInfo);
+						}
+						// ************************************************************************
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 	public static Boolean skipTables(String str) {
 		str = str.toLowerCase();
-		for (String x : CodeGeneratorUtils.SKIPTABLE.split(",")) {
+		for (String x : props.getProperty("skipTable").split(",")) {
 			if (str.contains(x.toLowerCase())) {
 				return true;
 			}
@@ -304,10 +385,10 @@ public class CodeGeneratorUtils {
 
 	public static Boolean includeTabbles(String str) {
 		str = str.toLowerCase();
-		if (CodeGeneratorUtils.INCLUETABLES.equals("*")) {
+		if (props.getProperty("inclueTables").equals("*")) {
 			return false;
 		}
-		for (String x : CodeGeneratorUtils.INCLUETABLES.split(",")) {
+		for (String x : props.getProperty("inclueTables").split(",")) {
 			if (str.contains(x.toLowerCase())) {
 				return false;
 			}
@@ -365,7 +446,7 @@ public class CodeGeneratorUtils {
 
 	public static String replaceRow(String str) {
 		str = str.toLowerCase().replaceFirst("tab_", "").replaceFirst("tb_", "").replaceFirst("t_", "");
-		for (String x : CodeGeneratorUtils.ROWREMOVEPREFIXES.split(",")) {
+		for (String x : props.getProperty("rowRemovePrefixes").split(",")) {
 			str = str.replaceFirst(x.toLowerCase(), "");
 		}
 		return str;
@@ -424,7 +505,9 @@ public class CodeGeneratorUtils {
 	 */
 	public static void batchBuilderByDirectory(Map<String, Object> modelMap) {
 		List<Map<String, Object>> srcFiles = new ArrayList<Map<String, Object>>();
-		getFile(CodeGeneratorUtils.TEMPLATE_PATH, srcFiles);
+		String TEMPLATE_PATH = CodeGeneratorUtils.class.getClassLoader().getResource("").getPath()
+		.replace("/target/classes/", "") + "/src/main/resources/" + props.getProperty("template_path");
+		getFile(TEMPLATE_PATH, srcFiles);
 		for (int i = 0; i < srcFiles.size(); i++) {
 			HashMap<String, Object> m = (HashMap<String, Object>) srcFiles.get(i);
 			Set<String> set = m.keySet();
@@ -442,7 +525,7 @@ public class CodeGeneratorUtils {
 				String templateFilePathAndName = String.valueOf(m.get(key));
 				String templateFilePath = templateFilePathAndName.replace("\\" + templateFileName, "");
 				String templateFilePathMiddle = "";
-				if (!templateFilePath.endsWith(CodeGeneratorUtils.TEMPLATE_NAME.replace("/", "\\"))) {
+				if (!templateFilePath.endsWith(props.getProperty("template_path").replace("/", "\\"))) {
 					templateFilePathMiddle = templateFilePath
 							.substring(templateFilePath.lastIndexOf("\\"), templateFilePath.length()).replace("\\", "");
 				}
@@ -454,11 +537,11 @@ public class CodeGeneratorUtils {
 					String path = null;
 					if (templateFileNameSuffix.equalsIgnoreCase(".java")) {
 						// 创建文件夹
-						path = CodeGeneratorUtils.PROJECT_PATH + "/" + CodeGeneratorUtils.PACKAGE_BASE.replace(".", "/")
+						path = CodeGeneratorUtils.PROJECT_PATH + "/" + props.getProperty("basePackage").replace(".", "/")
 								+ "/" + templateFileNamePrefix.toLowerCase();
 					}
 					if (templateFileNameSuffix.equalsIgnoreCase(".ftl")) {
-						path = CodeGeneratorUtils.PROJECT_PATH + "/" + CodeGeneratorUtils.PACKAGE_BASE.replace(".", "/")
+						path = CodeGeneratorUtils.PROJECT_PATH + "/" + props.getProperty("basePackage").replace(".", "/")
 								+ "/" + templateFilePathMiddle + "/";
 					}
 					String fileNameNew = templateFileNamePrefix
