@@ -1,7 +1,8 @@
 package com.bjc.lcp.system.common.utils;
 
-import com.bjc.lcp.system.common.exception.code.BaseResponseCode;
-import com.bjc.lcp.system.common.exception.code.ResponseCodeInterface;
+
+import com.bjc.lcp.common.base.BaseResponseCode;
+import com.bjc.lcp.common.base.ResponseCodeInterface;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
