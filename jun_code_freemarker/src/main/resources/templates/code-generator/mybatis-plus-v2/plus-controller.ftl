@@ -32,6 +32,7 @@ import java.util.Map;
 * @author ${authorName}
 * @date ${.now?string('yyyy-MM-dd')}
 */
+@Api(tags = "${classInfo.classComment}-管理")
 @Slf4j
 @RestController
 @RequestMapping("/${classInfo.className?uncap_first}")
