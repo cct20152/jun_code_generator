@@ -3,7 +3,6 @@ package com.jun.plugin.codegenerator;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -13,26 +12,21 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.druid.pool.DruidDataSource;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.jun.plugin.codegenerator.admin.core.model.ClassInfo;
 import com.jun.plugin.codegenerator.admin.core.model.FieldInfo;
 
-import cn.hutool.core.io.unit.DataSize;
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.db.meta.MetaUtil;
-import cn.hutool.db.meta.Table;
-import cn.hutool.db.meta.TableType;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
@@ -46,7 +40,7 @@ public class CodeGeneratorUtils {
 	private static final Logger logger = LoggerFactory.getLogger(CodeGeneratorUtils.class);
 	
 	public static void main(String[] args) throws Exception {
-		genTables(new String[] { "test"/* ,"app_env" */});
+		genTables(new String[] { "api_config"/* ,"app_env" */});
 	}
 
 
@@ -158,12 +152,12 @@ public class CodeGeneratorUtils {
 			String databaseType = metaData.getDatabaseProductName(); // 获取数据库类型：MySQL
 			// 针对MySQL数据库进行相关生成操作
 			if (databaseType.equals("MySQL")) {
-				ResultSet tableResultSet = metaData.getTables(null, "%", "%", new String[] { "TABLE" }); // 获取所有表结构
+				ResultSet tableResultSet = metaData.getTables(conn.getCatalog(), conn.getSchema() /*"%"*/,  "%", new String[] { "TABLE" }); // 获取所有表结构
 				String database = conn.getCatalog(); // 获取数据库名字
-
 				while (tableResultSet.next()) { // 循环所有表信息
 					String tableName = tableResultSet.getString("TABLE_NAME"); // 获取表名
 					if( tables == null  || ArrayUtil.containsIgnoreCase(tables, tableName)) {
+						List<Map<String,String>> pkList = getPrimaryKeysInfo(metaData,tableName);
 						String table = GenUtils.replace_(GenUtils.replaceTabblePreStr(tableName)); // 名字操作,去掉tab_,tb_，去掉_并转驼峰
 						String Table = GenUtils.firstUpper(table); // 获取表名,首字母大写
 						String tableComment = tableResultSet.getString("REMARKS"); // 获取表备注
@@ -180,7 +174,6 @@ public class CodeGeneratorUtils {
 						}
 						// V1 初始化数据及对象 模板V1 field List
 						List<FieldInfo> fieldList = new ArrayList<FieldInfo>();
-//						cn.hutool.db.meta.Table
 						while (cloumnsSet.next()) {
 							String remarks = cloumnsSet.getString("REMARKS");// 列的描述
 							String columnName = cloumnsSet.getString("COLUMN_NAME"); // 获取列名
@@ -189,11 +182,14 @@ public class CodeGeneratorUtils {
 							String TABLE_SCHEM = cloumnsSet.getString("TABLE_SCHEM");// 获取
 							String COLUMN_DEF = cloumnsSet.getString("COLUMN_DEF");// 获取
 							int NULLABLE = cloumnsSet.getInt("NULLABLE");// 获取
+							int DATA_TYPE = cloumnsSet.getInt("DATA_TYPE");// 获取
 							// showColumnInfo(cloumnsSet);
 							String propertyName = GenUtils.replace_(GenUtils.replaceRow(columnName));// 处理列名，驼峰
 							typeSet.add(javaType);// 需要导包的类型
+							Boolean isPk = false;
 							if (columnName.equals(key)) {
 								keyType = GenUtils.simpleName(javaType);// 主键类型,单主键支持
+								isPk = true;
 							}
 							// V1 初始化数据及对象
 							FieldInfo fieldInfo = new FieldInfo();
@@ -201,6 +197,11 @@ public class CodeGeneratorUtils {
 							fieldInfo.setFieldName(propertyName);
 							fieldInfo.setFieldClass(GenUtils.simpleName(javaType));
 							fieldInfo.setFieldComment(remarks);
+							fieldInfo.setColumnSize(COLUMN_SIZE);
+							fieldInfo.setNullable(NULLABLE==0);
+							fieldInfo.setFieldType(javaType);
+							fieldInfo.setColumnType(javaType);
+							fieldInfo.setIsPrimaryKey(isPk);
 							fieldList.add(fieldInfo);
 						}
 						// ************************************************************************
@@ -210,6 +211,7 @@ public class CodeGeneratorUtils {
 							classInfo.setClassName(classNameFirstUpper);
 							classInfo.setClassComment(tableComment);
 							classInfo.setFieldList(fieldList);
+							classInfo.setPkSize(pkList.size());
 							list.add(classInfo);
 						}
 						// ************************************************************************
@@ -221,6 +223,34 @@ public class CodeGeneratorUtils {
 		}
 		return list;
 	}
+	
+	
+	//获取表主键信息
+	public static List getPrimaryKeysInfo(DatabaseMetaData dbmd,String tablename) {
+		List pkList = Lists.newArrayList();
+	    ResultSet rs = null;
+	    try {
+	        rs = dbmd.getPrimaryKeys(null, null, tablename);
+	        while (rs.next()) {
+	            String tableCat = rs.getString("TABLE_CAT");  //表类别(可为null)
+	            String tableSchemaName = rs.getString("TABLE_SCHEM");//表模式（可能为空）,在oracle中获取的是命名空间,其它数据库未知
+	            String tableName = rs.getString("TABLE_NAME");  //表名
+	            String columnName = rs.getString("COLUMN_NAME");//列名
+	            short keySeq = rs.getShort("KEY_SEQ");//序列号(主键内值1表示第一列的主键，值2代表主键内的第二列)
+	            String pkName = rs.getString("PK_NAME"); //主键名称
+	            Map m = Maps.newHashMap();
+	            m.put("COLUMN_NAME", columnName);
+	            m.put("KEY_SEQ", keySeq);
+	            m.put("PK_NAME", pkName);
+	            pkList.add(m);
+	            System.out.println(tableCat + " - " + tableSchemaName + " - " + tableName + " - " + columnName + " - " + keySeq + " - " + pkName);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return pkList;
+	}
+
 	
 
 //	/***

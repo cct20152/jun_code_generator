@@ -7,8 +7,10 @@ package com.jun.plugin.codegenerator.admin.core.model;
 public class FieldInfo {
 
     private String columnName;
+    private String columnType;
     private String fieldName;
     private String fieldClass;
+    private String fieldType;
     private String fieldComment;
     private Boolean isPrimaryKey;
     private int columnSize;
@@ -54,6 +56,48 @@ public class FieldInfo {
 	public void setIsPrimaryKey(Boolean isPrimaryKey) {
 		this.isPrimaryKey = isPrimaryKey;
 	}
+
+	public int getColumnSize() {
+		return columnSize;
+	}
+
+	public void setColumnSize(int columnSize) {
+		this.columnSize = columnSize;
+	}
+
+	public Boolean getNullable() {
+		return nullable;
+	}
+
+	public void setNullable(Boolean nullable) {
+		this.nullable = nullable;
+	}
+
+	public Boolean getComment() {
+		return comment;
+	}
+
+	public void setComment(Boolean comment) {
+		this.comment = comment;
+	}
+
+	public String getColumnType() {
+		return columnType;
+	}
+
+	public void setColumnType(String columnType) {
+		this.columnType = columnType;
+	}
+
+	public String getFieldType() {
+		return fieldType;
+	}
+
+	public void setFieldType(String fieldType) {
+		this.fieldType = fieldType;
+	}
+	
+	
 
 
 }

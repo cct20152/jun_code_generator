@@ -11,6 +11,7 @@ public class ClassInfo {
     private String tableName;
     private String className;
 	private String classComment;
+	private int pkSize;
 
 	private List<FieldInfo> fieldList;
 
@@ -44,6 +45,14 @@ public class ClassInfo {
 
 	public void setFieldList(List<FieldInfo> fieldList) {
 		this.fieldList = fieldList;
+	}
+
+	public int getPkSize() {
+		return pkSize;
+	}
+
+	public void setPkSize(int pkSize) {
+		this.pkSize = pkSize;
 	}
 
 }
