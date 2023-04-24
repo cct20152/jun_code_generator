@@ -44,7 +44,7 @@ public class ${classInfo.className}Controller {
     @Resource
     private ${classInfo.className}Mapper ${classInfo.className?uncap_first}Mapper;
     
-    @ApiOperation(value = "新增")
+    @ApiOperation(value = "${classInfo.classComment}-新增")
     @PostMapping("/add")
     @RequiresPermissions("${classInfo.className?uncap_first}:add")
     public DataResult add(@RequestBody ${classInfo.className}Entity vo) {
@@ -53,9 +53,9 @@ public class ${classInfo.className}Controller {
 <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
 <#list classInfo.fieldList as fieldItem >
 <#if fieldItem.nullable==true>
-         if (ObjectUtils.isEmpty(dto.get${fieldItem.fieldName?cap_first}())) {
-              return DataResult.fail("参数[${fieldItem.fieldName}]不能为空");
-         }
+ //        if (ObjectUtils.isEmpty(dto.get${fieldItem.fieldName?cap_first}())) {
+ //             return DataResult.fail("参数[${fieldItem.fieldName}]不能为空");
+ //        }
 </#if>
 </#list>
 </#if>
@@ -70,13 +70,15 @@ public class ${classInfo.className}Controller {
         ${classInfo.className}Entity entity = ${classInfo.className?uncap_first}Service.getOne(queryWrapper);;
         if (entity != null) {
             return DataResult.fail("数据已存在");
+        }else{
+            entity = new ${classInfo.className}Entity();
         }
         BeanUtils.copyProperties(dto, entity);
         ${classInfo.className?uncap_first}Service.save(entity);
         return DataResult.success();
     }
     
-    @ApiOperation(value = "删除")
+    @ApiOperation(value = "${classInfo.classComment}-删除")
     @DeleteMapping("/remove")
     @RequiresPermissions("${classInfo.className?uncap_first}:remove")
     public DataResult delete(@RequestBody ${classInfo.className}Entity vo) {
@@ -93,19 +95,18 @@ public class ${classInfo.className}Controller {
 </#if>
         LambdaQueryWrapper<${classInfo.className}Entity> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.eq(${classInfo.className}Entity::getAppNo, dto.getAppNo());
-    	${classInfo.className?uncap_first}Service.remove(queryWrapper);
-        return DataResult.success();
+        return DataResult.success(${classInfo.className?uncap_first}Service.remove(queryWrapper));
     }
 
-    @ApiOperation(value = "删除")
+    @ApiOperation(value = "${classInfo.classComment}-删除")
     @DeleteMapping("/delete")
     @RequiresPermissions("${classInfo.className?uncap_first}:delete")
     public DataResult delete(@RequestBody @ApiParam(value = "id集合") List<String> ids) {
-    	${classInfo.className?uncap_first}Service.removeByIds(ids);
-        return DataResult.success();
+        return DataResult.success(${classInfo.className?uncap_first}Service.removeByIds(ids));
     }
 
-    @ApiOperation(value = "更新")
+
+    @ApiOperation(value = "${classInfo.classComment}-更新")
     @PutMapping("/update")
     @RequiresPermissions("${classInfo.className?uncap_first}:update")
     public DataResult update(@RequestBody ${classInfo.className}VO vo) {
@@ -133,13 +134,46 @@ public class ${classInfo.className}Controller {
             return DataResult.fail("数据不存在");
         }
         BeanUtils.copyProperties(dto, entity);
-        ${classInfo.className?uncap_first}Service.updateById(entity);
-        return DataResult.success();
+        return DataResult.success(${classInfo.className?uncap_first}Service.updateById(entity));
     }
+    
 
 
-    @ApiOperation(value = "查询列表分页数据")
-    @PostMapping("/listByPage")
+    @ApiOperation(value = "${classInfo.classComment}-查询单条")
+    @GetMapping("/getOne")
+    @RequiresPermissions("${classInfo.className?uncap_first}:getOne")
+    public DataResult getOne(@RequestBody ${classInfo.className}VO vo) {
+    	${classInfo.className}DTO dto = new ${classInfo.className}DTO();
+    	BeanUtils.copyProperties(vo, dto);
+<#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
+<#list classInfo.fieldList as fieldItem >
+<#if fieldItem.isPrimaryKey==true>
+         if (StringUtils.isEmpty(dto.get${fieldItem.fieldName?cap_first}())) {
+              return DataResult.fail("参数[${fieldItem.fieldName}]不能为空");
+         }
+</#if>
+</#list>
+</#if>
+        LambdaQueryWrapper<${classInfo.className}Entity> queryWrapper = Wrappers.lambdaQuery();
+<#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
+<#list classInfo.fieldList as fieldItem >
+<#if fieldItem.isPrimaryKey==true>
+        queryWrapper.eq(${classInfo.className}Entity::get${fieldItem.fieldName?cap_first}, dto.get${fieldItem.fieldName?cap_first}());
+</#if>
+</#list>
+</#if>
+        ${classInfo.className}Entity entity = ${classInfo.className?uncap_first}Service.getOne(queryWrapper);;
+        if (entity == null) {
+            return DataResult.fail("数据不存在");
+        }
+        return DataResult.success(entity);
+    }
+    
+    
+
+
+    @ApiOperation(value = "${classInfo.classComment}-查询列表分页数据")
+    @GetMapping("/listByPage")
     @RequiresPermissions("${classInfo.className?uncap_first}:listByPage")
     public DataResult listByPage(@RequestBody ${classInfo.className}VO ${classInfo.className?uncap_first}) {
         Page page = new Page(${classInfo.className?uncap_first}.getPage(), ${classInfo.className?uncap_first}.getLimit());
@@ -163,8 +197,8 @@ public class ${classInfo.className}Controller {
         return DataResult.success(iPage);
     }
     
-    @ApiOperation(value = "查询全部列表数据")
-    @PostMapping("/list")
+    @ApiOperation(value = "${classInfo.classComment}-查询全部列表数据")
+    @GetMapping("/list")
     @RequiresPermissions("${classInfo.className?uncap_first}:list")
     public DataResult findListByPage(@RequestBody ${classInfo.className}VO ${classInfo.className?uncap_first}) {
         LambdaQueryWrapper<${classInfo.className}Entity> queryWrapper = Wrappers.lambdaQuery();

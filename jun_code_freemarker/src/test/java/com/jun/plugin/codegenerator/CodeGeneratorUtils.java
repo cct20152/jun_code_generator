@@ -26,7 +26,6 @@ import com.jun.plugin.codegenerator.admin.core.model.ClassInfo;
 import com.jun.plugin.codegenerator.admin.core.model.FieldInfo;
 
 import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.db.meta.MetaUtil;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
