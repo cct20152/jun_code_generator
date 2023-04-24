@@ -10,7 +10,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.BeanUtils;
@@ -53,9 +52,9 @@ public class ${classInfo.className}Controller {
 <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
 <#list classInfo.fieldList as fieldItem >
 <#if fieldItem.nullable==true>
- //        if (ObjectUtils.isEmpty(dto.get${fieldItem.fieldName?cap_first}())) {
- //             return DataResult.fail("参数[${fieldItem.fieldName}]不能为空");
- //        }
+        if (ObjectUtils.isEmpty(dto.get${fieldItem.fieldName?cap_first}())) {
+            return DataResult.fail("参数[${fieldItem.fieldName}]不能为空");
+        }
 </#if>
 </#list>
 </#if>
@@ -87,14 +86,20 @@ public class ${classInfo.className}Controller {
 <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
 <#list classInfo.fieldList as fieldItem >
 <#if fieldItem.isPrimaryKey==true>
-         if (StringUtils.isEmpty(dto.get${fieldItem.fieldName?cap_first}())) {
+         if (ObjectUtils.isEmpty(dto.get${fieldItem.fieldName?cap_first}())) {
               return DataResult.fail("参数[${fieldItem.fieldName}]不能为空");
          }
 </#if>
 </#list>
 </#if>
         LambdaQueryWrapper<${classInfo.className}Entity> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(${classInfo.className}Entity::getAppNo, dto.getAppNo());
+<#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
+<#list classInfo.fieldList as fieldItem >
+<#if fieldItem.isPrimaryKey==true>
+        queryWrapper.eq(${classInfo.className}Entity::get${fieldItem.fieldName?cap_first}, dto.get${fieldItem.fieldName?cap_first}());
+</#if>
+</#list>
+</#if>
         return DataResult.success(${classInfo.className?uncap_first}Service.remove(queryWrapper));
     }
 
@@ -115,7 +120,7 @@ public class ${classInfo.className}Controller {
 <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
 <#list classInfo.fieldList as fieldItem >
 <#if fieldItem.isPrimaryKey==true>
-         if (StringUtils.isEmpty(dto.get${fieldItem.fieldName?cap_first}())) {
+         if (ObjectUtils.isEmpty(dto.get${fieldItem.fieldName?cap_first}())) {
               return DataResult.fail("参数[${fieldItem.fieldName}]不能为空");
          }
 </#if>
@@ -148,7 +153,7 @@ public class ${classInfo.className}Controller {
 <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
 <#list classInfo.fieldList as fieldItem >
 <#if fieldItem.isPrimaryKey==true>
-         if (StringUtils.isEmpty(dto.get${fieldItem.fieldName?cap_first}())) {
+         if (ObjectUtils.isEmpty(dto.get${fieldItem.fieldName?cap_first}())) {
               return DataResult.fail("参数[${fieldItem.fieldName}]不能为空");
          }
 </#if>

@@ -35,7 +35,7 @@ public interface ${classInfo.className}Mapper extends BaseMapper<${classInfo.cla
      " </script>")
     int countAll(${classInfo.className}Entity dto);
     
-    @Select("SELECT count(1) from app_info")
+    @Select("SELECT count(1) from ${classInfo.tableName} ")
     int selectCount();
 
 }
