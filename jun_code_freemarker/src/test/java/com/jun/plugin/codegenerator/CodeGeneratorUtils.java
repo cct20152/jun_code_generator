@@ -40,7 +40,7 @@ public class CodeGeneratorUtils {
 	private static final Logger logger = LoggerFactory.getLogger(CodeGeneratorUtils.class);
 	
 	public static void main(String[] args) throws Exception {
-		genTables(new String[] { "api_config"/* ,"app_env" */});
+		genTables(new String[] { "app_info"/* ,"app_env" */});
 	}
 
 
@@ -56,10 +56,7 @@ public class CodeGeneratorUtils {
 			datas.put("isWithPackage",true);
 			datas.put("isSwagger",true);
 			datas.put("isComment",true);
-			datas.put("packageName","com.jun.plugin.biz");
-			datas.put("returnUtilFailure","【returnUtilFailure】");
-			datas.put("returnUtilSuccess","【returnUtilSuccess】");
-			datas.put("returnUtil","【returnUtil】");
+			datas.put("packageName",GenUtils.PACKAGE);
 			Map<String, String> result = new HashMap<String, String>();
 			try {
 				//processTemplatesStringWriter(datas, result);

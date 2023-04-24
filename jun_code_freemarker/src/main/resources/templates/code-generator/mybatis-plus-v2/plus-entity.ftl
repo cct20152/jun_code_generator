@@ -27,14 +27,13 @@ public class ${classInfo.className}Entity  extends BaseEntity  implements Serial
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(type = IdType.AUTO)
 <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
 <#list classInfo.fieldList as fieldItem >
     <#if isComment?exists && isComment==true>/**
     * ${fieldItem.fieldComment}
     */</#if><#if isSwagger?exists && isSwagger==true>
     @ApiModelProperty("${fieldItem.fieldComment}")</#if>
-    @TableField(value = "${fieldItem.columnName}" )
+    <#if fieldItem.isPrimaryKey==true>@TableId(value = "${fieldItem.columnName}" )<#else>@TableField(value = "${fieldItem.columnName}" )</#if>
     private ${fieldItem.fieldClass} ${fieldItem.fieldName};
 
 <#if isLombok?exists && isLombok==false>

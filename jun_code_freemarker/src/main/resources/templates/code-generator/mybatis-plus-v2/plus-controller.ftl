@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.ObjectUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -49,18 +50,50 @@ public class ${classInfo.className}Controller {
     public DataResult add(@RequestBody ${classInfo.className}Entity vo) {
     	${classInfo.className}DTO dto = new ${classInfo.className}DTO();
     	BeanUtils.copyProperties(vo, dto);
-        if(this.checkExists(dto)) {
-    		return DataResult.fail("同名记录信息已存在！");
-    	}
+<#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
+<#list classInfo.fieldList as fieldItem >
+<#if fieldItem.nullable==true>
+         if (ObjectUtils.isEmpty(dto.get${fieldItem.fieldName?cap_first}())) {
+              return DataResult.fail("参数[${fieldItem.fieldName}]不能为空");
+         }
+</#if>
+</#list>
+</#if>
         LambdaQueryWrapper<${classInfo.className}Entity> queryWrapper = Wrappers.lambdaQuery();
-//        queryWrapper.eq(${classInfo.className}Entity::getValue, dto.getValue());
-//        queryWrapper.eq(${classInfo.className}Entity::getId, dto.getId())
-        ${classInfo.className}Entity entity = ${classInfo.className?uncap_first}Service.getOne(queryWrapper);
+<#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
+<#list classInfo.fieldList as fieldItem >
+<#if fieldItem.isPrimaryKey==true>
+        queryWrapper.eq(${classInfo.className}Entity::get${fieldItem.fieldName?cap_first}, dto.get${fieldItem.fieldName?cap_first}());
+</#if>
+</#list>
+</#if>
+        ${classInfo.className}Entity entity = ${classInfo.className?uncap_first}Service.getOne(queryWrapper);;
         if (entity != null) {
             return DataResult.fail("数据已存在");
         }
         BeanUtils.copyProperties(dto, entity);
         ${classInfo.className?uncap_first}Service.save(entity);
+        return DataResult.success();
+    }
+    
+    @ApiOperation(value = "删除")
+    @DeleteMapping("/remove")
+    @RequiresPermissions("${classInfo.className?uncap_first}:remove")
+    public DataResult delete(@RequestBody ${classInfo.className}Entity vo) {
+    	${classInfo.className}DTO dto = new ${classInfo.className}DTO();
+    	BeanUtils.copyProperties(vo, dto);
+<#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
+<#list classInfo.fieldList as fieldItem >
+<#if fieldItem.isPrimaryKey==true>
+         if (StringUtils.isEmpty(dto.get${fieldItem.fieldName?cap_first}())) {
+              return DataResult.fail("参数[${fieldItem.fieldName}]不能为空");
+         }
+</#if>
+</#list>
+</#if>
+        LambdaQueryWrapper<${classInfo.className}Entity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(${classInfo.className}Entity::getAppNo, dto.getAppNo());
+    	${classInfo.className?uncap_first}Service.remove(queryWrapper);
         return DataResult.success();
     }
 
@@ -75,17 +108,29 @@ public class ${classInfo.className}Controller {
     @ApiOperation(value = "更新")
     @PutMapping("/update")
     @RequiresPermissions("${classInfo.className?uncap_first}:update")
-    public DataResult update(@RequestBody ${classInfo.className}Entity vo) {
+    public DataResult update(@RequestBody ${classInfo.className}VO vo) {
     	${classInfo.className}DTO dto = new ${classInfo.className}DTO();
     	BeanUtils.copyProperties(vo, dto);
-//        if (StringUtils.isEmpty(dto.getValue())) {
-//            return DataResult.fail("参数不能为空");
-//        }
+<#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
+<#list classInfo.fieldList as fieldItem >
+<#if fieldItem.isPrimaryKey==true>
+         if (StringUtils.isEmpty(dto.get${fieldItem.fieldName?cap_first}())) {
+              return DataResult.fail("参数[${fieldItem.fieldName}]不能为空");
+         }
+</#if>
+</#list>
+</#if>
         LambdaQueryWrapper<${classInfo.className}Entity> queryWrapper = Wrappers.lambdaQuery();
-//        queryWrapper.eq(${classInfo.className}Entity::getValue, dto.getValue());
-        ${classInfo.className}Entity entity = ${classInfo.className?uncap_first}Service.getById(dto.getId());
-        if (entity != null) {
-            return DataResult.fail("数据已存在");
+<#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
+<#list classInfo.fieldList as fieldItem >
+<#if fieldItem.isPrimaryKey==true>
+        queryWrapper.eq(${classInfo.className}Entity::get${fieldItem.fieldName?cap_first}, dto.get${fieldItem.fieldName?cap_first}());
+</#if>
+</#list>
+</#if>
+        ${classInfo.className}Entity entity = ${classInfo.className?uncap_first}Service.getOne(queryWrapper);;
+        if (entity == null) {
+            return DataResult.fail("数据不存在");
         }
         BeanUtils.copyProperties(dto, entity);
         ${classInfo.className?uncap_first}Service.updateById(entity);
@@ -93,45 +138,53 @@ public class ${classInfo.className}Controller {
     }
 
 
-    @ApiOperation(value = "查询列表数据")
+    @ApiOperation(value = "查询列表分页数据")
     @PostMapping("/listByPage")
-    @RequiresPermissions("${classInfo.className?uncap_first}:list")
-    public DataResult findListByPage(@RequestBody ${classInfo.className}Entity ${classInfo.className?uncap_first}) {
+    @RequiresPermissions("${classInfo.className?uncap_first}:listByPage")
+    public DataResult listByPage(@RequestBody ${classInfo.className}VO ${classInfo.className?uncap_first}) {
         Page page = new Page(${classInfo.className?uncap_first}.getPage(), ${classInfo.className?uncap_first}.getLimit());
-        if (StringUtils.isEmpty(${classInfo.className?uncap_first}.getId())) {
-            return DataResult.success();
+        ${classInfo.className}DTO dto = new ${classInfo.className}DTO();
+    	BeanUtils.copyProperties(${classInfo.className?uncap_first}, dto);
+        LambdaQueryWrapper<${classInfo.className}Entity> queryWrapper = Wrappers.lambdaQuery();
+<#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
+<#list classInfo.fieldList as fieldItem >
+<#if fieldItem.isPrimaryKey==true>
+        if (!ObjectUtils.isEmpty(${classInfo.className?uncap_first}.get${fieldItem.fieldName?cap_first}())) {
+            queryWrapper.eq(${classInfo.className}Entity::get${fieldItem.fieldName?cap_first}, dto.get${fieldItem.fieldName?cap_first}());
         }
-        IPage<${classInfo.className}Entity> iPage = ${classInfo.className?uncap_first}Service.listByPage(page, ${classInfo.className?uncap_first}.getId());
+<#else>
+        if (!ObjectUtils.isEmpty(${classInfo.className?uncap_first}.get${fieldItem.fieldName?cap_first}())) {
+            queryWrapper.eq(${classInfo.className}Entity::get${fieldItem.fieldName?cap_first}, dto.get${fieldItem.fieldName?cap_first}());
+        }
+</#if>
+</#list>
+</#if>
+        IPage<${classInfo.className}Entity> iPage = ${classInfo.className?uncap_first}Service.page(page, queryWrapper);
         return DataResult.success(iPage);
     }
-
-
-    @GetMapping("/queryByKey/{code}")
-    @ApiOperation(value = "关键KEYWORD接口")
-    @RequiresPermissions("sysDict:query")
-    public DataResult querCode(@PathVariable("code") String code) {
-        LambdaQueryWrapper<${classInfo.className}Entity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(${classInfo.className}Entity::getCode, code);
-        wrapper.orderByAsc(${classInfo.className}Entity::getSort);
-        List<${classInfo.className}Entity> result = ${classInfo.className?uncap_first}Mapper.selectList(wrapper);
-        return DataResult.success(result);
-
-    }
     
-    @PostMapping("checkExists")
-    @ResponseBody
-    public Boolean checkExists(@RequestBody ${classInfo.className}DTO dto){
-    	${classInfo.className}Entity entity = new ${classInfo.className}Entity();
-    	BeanUtils.copyProperties(dto, entity);
-    	LambdaQueryWrapper<${classInfo.className}Entity> queryWrapper = Wrappers.lambdaQuery();
-    	queryWrapper.eq(${classInfo.className}Entity::getId, dto.getId());// 这里换成自己查询的关键条件
-    	${classInfo.className}Entity one = appInfoService.getOne(queryWrapper.last("LIMIT 1"));
-    	if(one == null) {
-    		return false;
-    	}else {
-    		return true;
-    	}
+    @ApiOperation(value = "查询全部列表数据")
+    @PostMapping("/list")
+    @RequiresPermissions("${classInfo.className?uncap_first}:list")
+    public DataResult findListByPage(@RequestBody ${classInfo.className}VO ${classInfo.className?uncap_first}) {
+        LambdaQueryWrapper<${classInfo.className}Entity> queryWrapper = Wrappers.lambdaQuery();
+<#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
+<#list classInfo.fieldList as fieldItem >
+<#if fieldItem.isPrimaryKey==true>
+        if (!ObjectUtils.isEmpty(${classInfo.className?uncap_first}.get${fieldItem.fieldName?cap_first}())) {
+            queryWrapper.eq(${classInfo.className}Entity::get${fieldItem.fieldName?cap_first}, ${classInfo.className?uncap_first}.get${fieldItem.fieldName?cap_first}());
+        }
+<#else>
+        if (!ObjectUtils.isEmpty(${classInfo.className?uncap_first}.get${fieldItem.fieldName?cap_first}())) {
+            queryWrapper.eq(${classInfo.className}Entity::get${fieldItem.fieldName?cap_first}, ${classInfo.className?uncap_first}.get${fieldItem.fieldName?cap_first}());
+        }
+</#if>
+</#list>
+</#if>
+        List<${classInfo.className}Entity> list = ${classInfo.className?uncap_first}Service.list(queryWrapper);
+        return DataResult.success(list);
     }
+
 
 }
 

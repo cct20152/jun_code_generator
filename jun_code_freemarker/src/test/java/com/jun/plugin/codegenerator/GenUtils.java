@@ -46,6 +46,7 @@ public class GenUtils {
 	public static final String JAVA_PATH = "/src/main/java"; // java文件路径
 	public static final String RESOURCES_PATH = "/src/main/resources";// 资源文件路径
 	public static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates";// 模板位置
+	public static final String PACKAGE = "com.bjc.lcp.app";// 资源文件路径
 
     public static List<String> getTemplates() {
         List<String> templates = Lists.newArrayList();
@@ -93,13 +94,13 @@ public class GenUtils {
 //		filePaths.add(PROJECT_PATH + RESOURCES_PATH + "/mybatis/" + classInfo.getClassName() + ".xml");
 //		filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.model") + classInfo.getClassName() + ".java");
      // ************************************************************************************
-        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.controller") + classInfo.getClassName() + "Controller.java");
-        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.entity") + classInfo.getClassName() + "Entity.java");
-        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.mapper") + classInfo.getClassName() + "Mapper.java");
-        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.service") + classInfo.getClassName() + "Service.java");
-        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.dto") + classInfo.getClassName() + "DTO.java");
-        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.vo") + classInfo.getClassName() + "VO.java");
-        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.service.impl") + classInfo.getClassName() + "ServiceImpl.java");
+        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path(PACKAGE+".controller") + classInfo.getClassName() + "Controller.java");
+        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path(PACKAGE+".entity") + classInfo.getClassName() + "Entity.java");
+        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path(PACKAGE+".mapper") + classInfo.getClassName() + "Mapper.java");
+        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path(PACKAGE+".service") + classInfo.getClassName() + "Service.java");
+        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path(PACKAGE+".dto") + classInfo.getClassName() + "DTO.java");
+        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path(PACKAGE+".vo") + classInfo.getClassName() + "VO.java");
+        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path(PACKAGE+".service.impl") + classInfo.getClassName() + "ServiceImpl.java");
         return filePaths;
     }
     
