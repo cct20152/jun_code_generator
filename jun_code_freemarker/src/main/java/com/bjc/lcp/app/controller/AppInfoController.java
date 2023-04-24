@@ -115,7 +115,7 @@ public class AppInfoController {
 
 
     @ApiOperation(value = "应用表-查询单条")
-    @PutMapping("/getOne")
+    @GetMapping("/getOne")
     @RequiresPermissions("appInfo:getOne")
     public DataResult getOne(@RequestBody AppInfoVO vo) {
     	AppInfoDTO dto = new AppInfoDTO();
