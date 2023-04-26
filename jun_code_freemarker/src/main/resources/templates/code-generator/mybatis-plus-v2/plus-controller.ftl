@@ -6,10 +6,13 @@ import ${packageName}.dto.${classInfo.className}DTO;
 import ${packageName}.mapper.${classInfo.className}Mapper;
 import ${packageName}.entity.${classInfo.className}Entity;
 import ${packageName}.service.${classInfo.className}Service;
+import com.bjc.lcp.common.cnt.enums.CntTableNameEnum;
+import com.bjc.lcp.common.cnt.service.CntService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.BeanUtils;
@@ -44,10 +47,13 @@ public class ${classInfo.className}Controller {
     @Resource
     private ${classInfo.className}Mapper ${classInfo.className?uncap_first}Mapper;
     
+    @Autowired
+    private CntService cntService;
+    
     @ApiOperation(value = "${classInfo.classComment}-新增")
     @PostMapping("/add")
     @RequiresPermissions("${classInfo.className?uncap_first}:add")
-    public DataResult add(@RequestBody ${classInfo.className}Entity vo) {
+    public DataResult add(@Validated(${classInfo.className}VO.Create.class) @RequestBody ${classInfo.className}VO vo) {
     	${classInfo.className}DTO dto = new ${classInfo.className}DTO();
     	BeanUtils.copyProperties(vo, dto);
 <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
@@ -67,21 +73,20 @@ public class ${classInfo.className}Controller {
 </#if>
 </#list>
 </#if>
-        ${classInfo.className}Entity entity = ${classInfo.className?uncap_first}Service.getOne(queryWrapper);;
-        if (entity != null) {
+        List<${classInfo.className}Entity> list = ${classInfo.className?uncap_first}Service.list(queryWrapper);
+        if (list.size() > 0) {
             return DataResult.fail("数据已存在");
-        }else{
-            entity = new ${classInfo.className}Entity();
         }
+        ${classInfo.className}Entity entity = new ${classInfo.className}Entity();
+        
         BeanUtils.copyProperties(dto, entity);
-        ${classInfo.className?uncap_first}Service.save(entity);
-        return DataResult.success();
+        return DataResult.success(${classInfo.className?uncap_first}Service.save(entity));
     }
     
     @ApiOperation(value = "${classInfo.classComment}-删除")
     @DeleteMapping("/remove")
     @RequiresPermissions("${classInfo.className?uncap_first}:remove")
-    public DataResult delete(@RequestBody ${classInfo.className}Entity vo) {
+    public DataResult delete(@Validated(${classInfo.className}VO.Delete.class) @RequestBody ${classInfo.className}VO vo) {
     	${classInfo.className}DTO dto = new ${classInfo.className}DTO();
     	BeanUtils.copyProperties(vo, dto);
 <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
@@ -115,7 +120,7 @@ public class ${classInfo.className}Controller {
     @ApiOperation(value = "${classInfo.classComment}-更新")
     @PutMapping("/update")
     @RequiresPermissions("${classInfo.className?uncap_first}:update")
-    public DataResult update(@RequestBody ${classInfo.className}VO vo) {
+    public DataResult update(@Validated(${classInfo.className}VO.Update.class) @RequestBody ${classInfo.className}VO vo) {
     	${classInfo.className}DTO dto = new ${classInfo.className}DTO();
     	BeanUtils.copyProperties(vo, dto);
 <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
@@ -146,7 +151,7 @@ public class ${classInfo.className}Controller {
 
 
     @ApiOperation(value = "${classInfo.classComment}-查询单条")
-    @GetMapping("/getOne")
+    @RequestMapping(value = "/getOne",method = {RequestMethod.GET,RequestMethod.POST})
     @RequiresPermissions("${classInfo.className?uncap_first}:getOne")
     public DataResult getOne(@RequestBody ${classInfo.className}VO vo) {
     	${classInfo.className}DTO dto = new ${classInfo.className}DTO();
@@ -179,7 +184,7 @@ public class ${classInfo.className}Controller {
 
 
     @ApiOperation(value = "${classInfo.classComment}-查询列表分页数据")
-    @GetMapping("/listByPage")
+    @RequestMapping(value = "/listByPage",method = {RequestMethod.GET,RequestMethod.POST})
     @RequiresPermissions("${classInfo.className?uncap_first}:listByPage")
     public DataResult listByPage(@RequestBody ${classInfo.className}VO ${classInfo.className?uncap_first}) {
         Page page = new Page(${classInfo.className?uncap_first}.getPage(), ${classInfo.className?uncap_first}.getLimit());
@@ -204,7 +209,7 @@ public class ${classInfo.className}Controller {
     }
     
     @ApiOperation(value = "${classInfo.classComment}-查询全部列表数据")
-    @GetMapping("/list")
+    @RequestMapping(value = "/list",method = {RequestMethod.GET,RequestMethod.POST})
     @RequiresPermissions("${classInfo.className?uncap_first}:list")
     public DataResult findListByPage(@RequestBody ${classInfo.className}VO ${classInfo.className?uncap_first}) {
         LambdaQueryWrapper<${classInfo.className}Entity> queryWrapper = Wrappers.lambdaQuery();

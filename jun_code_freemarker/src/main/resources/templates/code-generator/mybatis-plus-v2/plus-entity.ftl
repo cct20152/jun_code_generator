@@ -33,7 +33,7 @@ public class ${classInfo.className}Entity  extends BaseEntity  implements Serial
     * ${fieldItem.fieldComment}
     */</#if><#if isSwagger?exists && isSwagger==true>
     @ApiModelProperty("${fieldItem.fieldComment}")</#if>
-    <#if fieldItem.isPrimaryKey==true>@TableId(value = "${fieldItem.columnName}" )<#else>@TableField(value = "${fieldItem.columnName}" )</#if>
+    <#if fieldItem.isPrimaryKey==true>@TableId(value = "${fieldItem.columnName}" ,type = IdType.AUTO )<#else>@TableField(value = "${fieldItem.columnName}" )</#if>
     private ${fieldItem.fieldClass} ${fieldItem.fieldName};
 
 <#if isLombok?exists && isLombok==false>

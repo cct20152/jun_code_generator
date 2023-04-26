@@ -39,7 +39,8 @@ public class CodeGeneratorUtils {
 	private static final Logger logger = LoggerFactory.getLogger(CodeGeneratorUtils.class);
 	
 	public static void main(String[] args) throws Exception {
-		String tables = "app_envt,app_member,app_datasource,app_git_config,git_user,app_deploy_config";
+		String tables = "git_user";
+//		String tables = "app_infoenvt,app_member,app_datasource,app_git_config,git_user,app_deploy_config";
 		genTables(tables.split(","));
 	}
 
