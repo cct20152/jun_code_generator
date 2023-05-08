@@ -174,9 +174,6 @@ public class ${classInfo.className}Controller {
 </#list>
 </#if>
         ${classInfo.className}Entity entity = ${classInfo.className?uncap_first}Service.getOne(queryWrapper);;
-        if (entity == null) {
-            return DataResult.fail("数据不存在");
-        }
         return DataResult.success(entity);
     }
     

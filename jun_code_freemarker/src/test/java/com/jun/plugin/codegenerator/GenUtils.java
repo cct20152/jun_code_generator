@@ -1,24 +1,34 @@
 package com.jun.plugin.codegenerator;
 
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import com.google.common.collect.Lists;
-import com.jun.plugin.codegenerator.admin.core.model.ClassInfo;
-
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.setting.dialect.PropsUtil;
-import cn.hutool.setting.yaml.YamlUtil;
-
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.jun.plugin.codegenerator.admin.core.model.ClassInfo;
+import com.jun.plugin.codegenerator.admin.core.model.FieldInfo;
+
+import cn.hutool.core.util.ArrayUtil;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
+import lombok.extern.slf4j.Slf4j;
 
 
 
@@ -29,12 +39,13 @@ import org.apache.commons.lang3.StringUtils;
  * @version V1.0
  * @date 2020年3月18日
  */
+@Slf4j
 public class GenUtils {
 
 	public static Properties props = new Properties(); // 配置文件
 	static {
 		try {
-			InputStream is = CodeGeneratorUtils.class.getClassLoader().getResourceAsStream("config.properties");
+			InputStream is = GenUtils.class.getClassLoader().getResourceAsStream("config.properties");
 			props.load(is);
 			Class.forName(props.getProperty("driver"));
 		} catch (Exception e) {
@@ -48,42 +59,7 @@ public class GenUtils {
 	public static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates";// 模板位置
 	public static final String PACKAGE = "com.bjc.lcp.app";// 资源文件路径
 
-    public static List<String> getTemplates() {
-        List<String> templates = Lists.newArrayList();
-//        templates.add("code-generator/controller.ftl");
-//        templates.add("code-generator/service.ftl");
-//        templates.add("code-generator/service_impl.ftl");
-//        templates.add("code-generator/dao.ftl");
-//        templates.add("code-generator/mybatis.ftl");
-//        templates.add("code-generator/model.ftl");
-        // ************************************************************************************
-        templates.add("code-generator/mybatis-plus-v2/plus-controller.ftl");
-        templates.add("code-generator/mybatis-plus-v2/plus-entity.ftl");
-        templates.add("code-generator/mybatis-plus-v2/plus-mapper.ftl");
-        templates.add("code-generator/mybatis-plus-v2/plus-service.ftl");
-        templates.add("code-generator/mybatis-plus-v2/plus-dto.ftl");
-        templates.add("code-generator/mybatis-plus-v2/plus-vo.ftl");
-        templates.add("code-generator/mybatis-plus-v2/plus-serviceimpl.ftl");
-        return templates;
-    }
-//    public static Map<String, Object> getPackages() {
-//    	Map<String, Object> datas = new HashMap<String, Object>();
-////    	datas.put("packageController", "com.jun.plugin.biz.controller");
-////		datas.put("packageService", "com.jun.plugin.biz.service");
-////		datas.put("packageServiceImpl", "com.jun.plugin.biz.service.impl");
-////		datas.put("packageDao", "com.jun.plugin.biz.dao");
-////		datas.put("packageMybatisXML", "com.jun.plugin.biz.model");
-////		datas.put("packageModel", "com.jun.plugin.biz.model");
-//    	// ************************************************************************************
-//    	datas.put("packageController", "com.jun.plugin.biz.controller");
-//    	datas.put("packageModel", "com.jun.plugin.biz.entity");
-//    	datas.put("packageMapper", "com.jun.plugin.biz.mapper");
-//		datas.put("packageService", "com.jun.plugin.biz.service");
-//		datas.put("packageDTO", "com.jun.plugin.biz.dto");
-//		datas.put("packageVO", "com.jun.plugin.biz.vo");
-//		datas.put("packageService", "com.jun.plugin.biz.service.impl");
-//    	return datas;
-//    }
+    
     
     public static List<String> getFilePaths(ClassInfo classInfo) {
         List<String> filePaths = new ArrayList<>();
@@ -235,13 +211,278 @@ public class GenUtils {
 			return "java.lang.String";
 		}
 	}
+	
+	
+	//****************************************************************************************************
+
+
+	public static void processTemplates(ClassInfo classInfo, Map<String, Object> datas,List<String> templates) throws IOException, TemplateException {
+		//List<String> templates = CodeGeneratorUtils.getTemplates();
+		for(int i = 0 ; i < templates.size() ; i++) {
+			GenUtils.processFile(templates.get(i), datas, GenUtils.getFilePaths(classInfo).get(i));
+		}
+	}
+
+	public static void processFile(String templateName, Map<String, Object> data, String filePath)
+			throws IOException, TemplateException {
+		Template template = getConfiguration().getTemplate(templateName);
+		File file = new File(filePath);
+		if (!file.getParentFile().exists()) {
+			file.getParentFile().mkdirs();
+		}
+		template.process(data, new FileWriter(file));
+		System.out.println(filePath + " 生成成功");
+	}
+
+//	public static String processTemplateIntoString(Template template, Object model)
+//			throws IOException, TemplateException {
+//		StringWriter result = new StringWriter();
+//		template.process(model, result);
+//		return result.toString();
+//	}
+
+	/***
+	 * 模板构建，StringWriter 返回构建后的文本，不生成文件
+	 */
+	public static String processString(String templateName, Map<String, Object> params)
+			throws IOException, TemplateException {
+		Template template = getConfiguration().getTemplate(templateName);
+		StringWriter result = new StringWriter();
+		template.process(params, result);
+		String htmlText = result.toString();
+		return htmlText;
+	}
+
+	private static freemarker.template.Configuration getConfiguration() throws IOException {
+		freemarker.template.Configuration cfg = new freemarker.template.Configuration(
+				freemarker.template.Configuration.VERSION_2_3_23);
+		cfg.setDirectoryForTemplateLoading(new File(GenUtils.TEMPLATE_FILE_PATH));
+		cfg.setDefaultEncoding("UTF-8");
+		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);
+		return cfg;
+	}
+
+
+	/***
+	 * 模板构建，输出源码字符串
+	 */
+	public static void processTemplatesStringWriter(Map<String, Object> datas, Map<String, String> result)
+			throws IOException, TemplateException {
+		//List<String> templates = CodeGeneratorUtils.getTemplates();
+//		for(int i = 0 ; i < templates.size() ; i++) {
+//			GenUtils.processFile(templates.get(i), datas, GenUtils.getFilePaths(classInfo).get(i));
+//		}
+				
+		result.put("controller_code", GenUtils.processString("code-generator/controller.ftl", datas));
+		result.put("service_code", GenUtils.processString("code-generator/service.ftl", datas));
+		result.put("service_impl_code", GenUtils.processString("code-generator/service_impl.ftl", datas));
+		result.put("dao_code", GenUtils.processString("code-generator/dao.ftl", datas));
+		result.put("mybatis_code", GenUtils.processString("code-generator/mybatis.ftl", datas));
+		result.put("model_code", GenUtils.processString("code-generator/model.ftl", datas));
+		System.out.println(result);
+	}
+	
+	public static List<ClassInfo> getClassInfo(String[] tables) {
+		List<ClassInfo> list = new ArrayList<ClassInfo>();
+		try {
+			Connection conn = DriverManager.getConnection(GenUtils.props.getProperty("url"), GenUtils.props.getProperty("uname"),
+					GenUtils.props.getProperty("pwd"));
+			DatabaseMetaData metaData = conn.getMetaData();
+			String databaseType = metaData.getDatabaseProductName(); // 获取数据库类型：MySQL
+			// 针对MySQL数据库进行相关生成操作
+			if (databaseType.equals("MySQL")) {
+				ResultSet tableResultSet = metaData.getTables(conn.getCatalog(), conn.getSchema() /*"%"*/,  "%", new String[] { "TABLE" }); // 获取所有表结构
+				String database = conn.getCatalog(); // 获取数据库名字
+				while (tableResultSet.next()) { // 循环所有表信息
+					String tableName = tableResultSet.getString("TABLE_NAME"); // 获取表名
+					if( tables == null  || ArrayUtil.containsIgnoreCase(tables, tableName)) {
+						List<Map<String,String>> pkList = getPrimaryKeysInfo(metaData,tableName);
+						String table = GenUtils.replace_(GenUtils.replaceTabblePreStr(tableName)); // 名字操作,去掉tab_,tb_，去掉_并转驼峰
+						String Table = GenUtils.firstUpper(table); // 获取表名,首字母大写
+						String tableComment = tableResultSet.getString("REMARKS"); // 获取表备注
+						String className = GenUtils.replace_(GenUtils.replaceTabblePreStr(tableName)); // 名字操作,去掉tab_,tb_，去掉_并转驼峰
+						String classNameFirstUpper = GenUtils.firstUpper(className); // 大写对象
+//						showTableInfo(tableResultSet); 
+						log.info("当前表名：" + tableName);
+						Set<String> typeSet = new HashSet<String>(); // 所有需要导包的类型
+						ResultSet cloumnsSet = metaData.getColumns(database, GenUtils.props.getProperty("uname"), tableName, null); // 获取表所有的列
+						ResultSet keySet = metaData.getPrimaryKeys(database, GenUtils.props.getProperty("uname"), tableName); // 获取主键
+						String key = "", keyType = "";
+						while (keySet.next()) {
+							key = keySet.getString(4);
+						}
+						// V1 初始化数据及对象 模板V1 field List
+						List<FieldInfo> fieldList = new ArrayList<FieldInfo>();
+						while (cloumnsSet.next()) {
+							String remarks = cloumnsSet.getString("REMARKS");// 列的描述
+							String columnName = cloumnsSet.getString("COLUMN_NAME"); // 获取列名
+							String javaType = GenUtils.getType(cloumnsSet.getInt("DATA_TYPE"));// 获取类型，并转成JavaType
+							int COLUMN_SIZE = cloumnsSet.getInt("COLUMN_SIZE");// 获取
+							String TABLE_SCHEM = cloumnsSet.getString("TABLE_SCHEM");// 获取
+							String COLUMN_DEF = cloumnsSet.getString("COLUMN_DEF");// 获取
+							int NULLABLE = cloumnsSet.getInt("NULLABLE");// 获取
+							int DATA_TYPE = cloumnsSet.getInt("DATA_TYPE");// 获取
+							// showColumnInfo(cloumnsSet);
+							String propertyName = GenUtils.replace_(GenUtils.replaceRow(columnName));// 处理列名，驼峰
+							typeSet.add(javaType);// 需要导包的类型
+							Boolean isPk = false;
+							if (columnName.equals(key)) {
+								keyType = GenUtils.simpleName(javaType);// 主键类型,单主键支持
+								isPk = true;
+							}
+							// V1 初始化数据及对象
+							FieldInfo fieldInfo = new FieldInfo();
+							fieldInfo.setColumnName(columnName);
+							fieldInfo.setFieldName(propertyName);
+							fieldInfo.setFieldClass(GenUtils.simpleName(javaType));
+							fieldInfo.setFieldComment(remarks);
+							fieldInfo.setColumnSize(COLUMN_SIZE);
+							fieldInfo.setNullable(NULLABLE==0);
+							fieldInfo.setFieldType(javaType);
+							fieldInfo.setColumnType(javaType);
+							fieldInfo.setIsPrimaryKey(isPk);
+							fieldList.add(fieldInfo);
+						}
+						// ************************************************************************
+						if (fieldList != null && fieldList.size() > 0) {
+							ClassInfo classInfo = new ClassInfo();
+							classInfo.setTableName(tableName);
+							classInfo.setClassName(classNameFirstUpper);
+							classInfo.setClassComment(tableComment);
+							classInfo.setFieldList(fieldList);
+							classInfo.setPkSize(pkList.size());
+							list.add(classInfo);
+						}
+						// ************************************************************************
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	//获取表主键信息
+	public static List getPrimaryKeysInfo(DatabaseMetaData dbmd,String tablename) {
+		List pkList = Lists.newArrayList();
+	    ResultSet rs = null;
+	    try {
+	        rs = dbmd.getPrimaryKeys(null, null, tablename);
+	        while (rs.next()) {
+	            String tableCat = rs.getString("TABLE_CAT");  //表类别(可为null)
+	            String tableSchemaName = rs.getString("TABLE_SCHEM");//表模式（可能为空）,在oracle中获取的是命名空间,其它数据库未知
+	            String tableName = rs.getString("TABLE_NAME");  //表名
+	            String columnName = rs.getString("COLUMN_NAME");//列名
+	            short keySeq = rs.getShort("KEY_SEQ");//序列号(主键内值1表示第一列的主键，值2代表主键内的第二列)
+	            String pkName = rs.getString("PK_NAME"); //主键名称
+	            Map m = Maps.newHashMap();
+	            m.put("COLUMN_NAME", columnName);
+	            m.put("KEY_SEQ", keySeq);
+	            m.put("PK_NAME", pkName);
+	            pkList.add(m);
+	            System.out.println(tableCat + " - " + tableSchemaName + " - " + tableName + " - " + columnName + " - " + keySeq + " - " + pkName);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return pkList;
+	}
+
+	
+
+//	/***
+//	 * 数据构建 ClassInfo
+//	 */
+//	public static List<ClassInfo> getClassInfoNew(String[] tables) {
+//		List<ClassInfo> list = new ArrayList<ClassInfo>();
+//		try {
+//			DruidDataSource dataSource = new DruidDataSource();
+//			dataSource.setUrl(GenUtils.props.getProperty("url"));
+//			dataSource.setUsername(GenUtils.props.getProperty("uname"));
+//			dataSource.setPassword(GenUtils.props.getProperty("pwd"));
+//			Connection conn = dataSource.getConnection();
+//			DatabaseMetaData metaData = conn.getMetaData();
+//			String databaseType = metaData.getDatabaseProductName(); // 获取数据库类型：MySQL
+//			List<String> tableNames = MetaUtil.getTables(dataSource,"lcp-dev",TableType.TABLE);
+//			// 针对MySQL数据库进行相关生成操作
+//			if (databaseType.equals("MySQL")) {
+//				ResultSet tableResultSet = metaData.getTables(null, "%", "%", new String[] { "TABLE" }); // 获取所有表结构
+//				String database = conn.getCatalog(); // 获取数据库名字
+//
+//				while (tableResultSet.next()) { // 循环所有表信息
+//					String tableName = tableResultSet.getString("TABLE_NAME"); // 获取表名
+//					if( tables == null  || ArrayUtil.containsIgnoreCase(tables, tableName)) {
+//						Table tab = MetaUtil.getTableMeta(dataSource, databaseType);
+//						
+//						String table = GenUtils.replace_(GenUtils.replaceTabblePreStr(tableName)); // 名字操作,去掉tab_,tb_，去掉_并转驼峰
+//						String Table = GenUtils.firstUpper(table); // 获取表名,首字母大写
+//						String tableComment = tableResultSet.getString("REMARKS"); // 获取表备注
+//						String className = GenUtils.replace_(GenUtils.replaceTabblePreStr(tableName)); // 名字操作,去掉tab_,tb_，去掉_并转驼峰
+//						String classNameFirstUpper = GenUtils.firstUpper(className); // 大写对象
+////						showTableInfo(tableResultSet); 
+//						logger.info("当前表名：" + tableName);
+//						
+//						Set<String> typeSet = new HashSet<String>(); // 所有需要导包的类型
+//						ResultSet cloumnsSet = metaData.getColumns(database, GenUtils.props.getProperty("uname"), tableName, null); // 获取表所有的列
+//						ResultSet keySet = metaData.getPrimaryKeys(database, GenUtils.props.getProperty("uname"), tableName); // 获取主键
+//						String key = "", keyType = "";
+//						while (keySet.next()) {
+//							key = keySet.getString(4);
+//						}
+//						// V1 初始化数据及对象 模板V1 field List
+//						List<FieldInfo> fieldList = new ArrayList<FieldInfo>();
+//						
+//						while (cloumnsSet.next()) {
+//							String remarks = cloumnsSet.getString("REMARKS");// 列的描述
+//							String columnName = cloumnsSet.getString("COLUMN_NAME"); // 获取列名
+//							String javaType = GenUtils.getType(cloumnsSet.getInt("DATA_TYPE"));// 获取类型，并转成JavaType
+//							int COLUMN_SIZE = cloumnsSet.getInt("COLUMN_SIZE");// 获取
+//							String TABLE_SCHEM = cloumnsSet.getString("TABLE_SCHEM");// 获取
+//							String COLUMN_DEF = cloumnsSet.getString("COLUMN_DEF");// 获取
+//							int NULLABLE = cloumnsSet.getInt("NULLABLE");// 获取
+//							// showColumnInfo(cloumnsSet);
+//							String propertyName = GenUtils.replace_(GenUtils.replaceRow(columnName));// 处理列名，驼峰
+//							typeSet.add(javaType);// 需要导包的类型
+//							if (columnName.equals(key)) {
+//								keyType = GenUtils.simpleName(javaType);// 主键类型,单主键支持
+//							}
+//							// V1 初始化数据及对象
+//							FieldInfo fieldInfo = new FieldInfo();
+//							fieldInfo.setColumnName(columnName);
+//							fieldInfo.setFieldName(propertyName);
+//							fieldInfo.setFieldClass(GenUtils.simpleName(javaType));
+//							fieldInfo.setFieldComment(remarks);
+//							fieldList.add(fieldInfo);
+//						}
+//						// ************************************************************************
+//						if (fieldList != null && fieldList.size() > 0) {
+//							ClassInfo classInfo = new ClassInfo();
+//							classInfo.setTableName(tableName);
+//							classInfo.setClassName(classNameFirstUpper);
+//							classInfo.setClassComment(tableComment);
+//							classInfo.setFieldList(fieldList);
+//							list.add(classInfo);
+//						}
+//						// ************************************************************************
+//					}
+//				}
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return list;
+//	}
+
+	//****************************************************************************************************
 
 	/***
 	 * 构建 Java文件，遍历文件夹下所有的模板，然后生成对应的文件（需要配置模板的package及path）
 	 */
 	public static void batchBuilderByDirectory1111(Map<String, Object> modelMap) {
 		List<Map<String, Object>> srcFiles = new ArrayList<Map<String, Object>>();
-		String TEMPLATE_PATH = CodeGeneratorUtils.class.getClassLoader().getResource("").getPath()
+		String TEMPLATE_PATH = GenUtils.class.getClassLoader().getResource("").getPath()
 		.replace("/target/classes/", "") + "/src/main/resources/" + props.getProperty("template_path");
 		getFile(TEMPLATE_PATH, srcFiles);
 		for (int i = 0; i < srcFiles.size(); i++) {
@@ -285,7 +526,7 @@ public class GenUtils {
 							.replace("${classNameLower}", String.valueOf(modelMap.get("Table")).toLowerCase());
 					// 创建文件
 //					GeneratorUtils.writer(template, modelMap, path + "/" + fileNameNew);
-					CodeGeneratorUtils.processFile(templateFileName, modelMap, path + "/" + fileNameNew);
+					GenUtils.processFile(templateFileName, modelMap, path + "/" + fileNameNew);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
