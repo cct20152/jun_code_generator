@@ -20,6 +20,8 @@ target
 bin
 .settings
 
+gen
+
 # Idea
 .idea
 *.iml
