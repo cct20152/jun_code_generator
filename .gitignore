@@ -20,7 +20,7 @@ target
 bin
 .settings
 
-gen
+doc2
 
 # Idea
 .idea
