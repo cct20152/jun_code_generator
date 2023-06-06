@@ -56,6 +56,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
+		<!--thymeleaf默认使用html5规则标签必须闭合等 使用次此包正常解析-->
+		<!--<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>-->
 
 		<!-- devtools -->
 		<dependency>
@@ -135,11 +140,11 @@
             <version>3.4.2</version>
         </dependency> -->
         <!--通用mapper-->
-        <dependency>
+        <!--<dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-spring-boot-starter</artifactId>
             <version>2.1.2</version>
-        </dependency>
+        </dependency>-->
         <!--mybatis -->
         <!-- <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -182,6 +187,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+			<version>1.18.26</version>
         </dependency>
         <!--代码生成器依赖-->
         <!-- <dependency>
@@ -251,7 +257,7 @@
 						<version>3.0.1</version> <executions> <execution> <phase>package</phase> 
 						<goals> <goal>jar-no-fork</goal> </goals> </execution> </executions> </plugin> -->
 					<!-- Javadoc -->
-					<plugin>
+					<!--<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-javadoc-plugin</artifactId>
 						<version>3.0.0</version>
@@ -263,9 +269,9 @@
 								</goals>
 							</execution>
 						</executions>
-					</plugin>
+					</plugin>-->
 					<!-- GPG -->
-					<plugin>
+					<!--<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
 						<version>1.6</version>
@@ -280,7 +286,7 @@
 								</goals>
 							</execution>
 						</executions>
-					</plugin>
+					</plugin>-->
 				</plugins>
 			</build>
 			<distributionManagement>
@@ -329,7 +335,38 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<!--Maven资源过滤设置-->
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+					<include>**/*.yaml</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+					<include>**/*.yaml</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.css</include>
+					<include>**/*.html</include>
+					<include>**/*.js</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
 	</build>
+
 
 
 </project>

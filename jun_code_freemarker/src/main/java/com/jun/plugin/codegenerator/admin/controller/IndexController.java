@@ -33,6 +33,10 @@ public class IndexController {
     public String index() {
         return "index";
     }
+    @RequestMapping("/generate")
+    public String index2() {
+        return "generate";
+    }
 
     @RequestMapping("/codeGenerate")
     @ResponseBody
