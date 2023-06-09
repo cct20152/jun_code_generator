@@ -11,8 +11,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.jun.plugin.codegenerator.admin.core.exception.CodeGenerateException;
-import com.jun.plugin.codegenerator.admin.core.model.ClassInfo;
-import com.jun.plugin.codegenerator.admin.core.model.FieldInfo;
+import com.jun.plugin.codegenerator.core.model.ClassInfo;
+import com.jun.plugin.codegenerator.core.model.FieldInfo;
 
 public class TableParseUtil {
 

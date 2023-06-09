@@ -4,7 +4,7 @@ package com.jun.plugin.codegenerator.test;
 import org.junit.Test;
 
 import com.jun.plugin.codegenerator.admin.core.CodeGeneratorTool;
-import com.jun.plugin.codegenerator.admin.core.model.ClassInfo;
+import com.jun.plugin.codegenerator.core.model.ClassInfo;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

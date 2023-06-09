@@ -3,7 +3,7 @@ package com.jun.plugin.codegenerator.admin.core;
 
 import java.io.IOException;
 
-import com.jun.plugin.codegenerator.admin.core.model.ClassInfo;
+import com.jun.plugin.codegenerator.core.model.ClassInfo;
 import com.jun.plugin.codegenerator.admin.core.util.TableParseUtil;
 
 /**

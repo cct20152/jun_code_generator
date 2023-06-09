@@ -27,15 +27,35 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- SpringBoot的依赖配置-->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-parent</artifactId>
-				<version>${spring-boot.version}</version>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<!-- <version>2.6.9</version> -->
+				<!-- <version>2.3.12.RELEASE</version> -->
+				<!-- <version>2.4.13</version> -->
+				<version>2.5.14</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Hoxton.SR9</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>com.alibaba.cloud</groupId>
+				<artifactId>spring-cloud-alibaba-dependencies</artifactId>
+				<version>2.2.6.RELEASE</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
 
 	<dependencies>
 
@@ -61,6 +81,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
 
 		<!-- devtools -->
 		<dependency>
@@ -335,6 +359,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+
 		<!--Maven资源过滤设置-->
 		<resources>
 			<resource>
@@ -343,24 +368,20 @@
 					<include>**/*.properties</include>
 					<include>**/*.xml</include>
 					<include>**/*.yaml</include>
+					<include>**/*.yml</include>
+					<include>**/*.ftl</include>
 				</includes>
 				<filtering>false</filtering>
 			</resource>
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
-					<include>**/*.properties</include>
+					<include>**/*.*</include>
+					<!--<include>**/*.properties</include>
 					<include>**/*.xml</include>
 					<include>**/*.yaml</include>
-				</includes>
-				<filtering>false</filtering>
-			</resource>
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**/*.css</include>
-					<include>**/*.html</include>
-					<include>**/*.js</include>
+					<include>**/*.yml</include>
+					<include>**/*.ftl</include>-->
 				</includes>
 				<filtering>false</filtering>
 			</resource>

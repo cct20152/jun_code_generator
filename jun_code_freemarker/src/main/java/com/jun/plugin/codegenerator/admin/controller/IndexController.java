@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jun.plugin.codegenerator.admin.core.CodeGeneratorTool;
-import com.jun.plugin.codegenerator.admin.core.model.ClassInfo;
+import com.jun.plugin.codegenerator.core.model.ClassInfo;
 import com.jun.plugin.codegenerator.admin.core.util.StringUtils;
 import com.jun.plugin.codegenerator.admin.model.ReturnT;
 import com.jun.plugin.codegenerator.admin.util.FreemarkerTool;

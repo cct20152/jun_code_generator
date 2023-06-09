@@ -25,7 +25,7 @@ public class SpringCodeGeneratorApplication  extends SpringBootServletInitialize
 		InetAddress inetAddress = Inet4Address.getLocalHost();
 		String hostAddress = inetAddress.getHostAddress();
 		String serverPort = env.getProperty("server.port");
-		String serverPath = env.getProperty("spring.application.name");
+		String serverPath = env.getProperty("server.servlet.context-path");
 		log.info("项目启动成功！访问地址: http://{}:{}/{}", hostAddress, serverPort, serverPath);
 		log.info("本机地址: http://localhost:{}", serverPort);
 	}
