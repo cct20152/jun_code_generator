@@ -20,6 +20,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.file.FileNameUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.jun.plugin.codegenerator.core.model.ClassInfo;
@@ -63,7 +64,19 @@ public class GenUtils {
 
 
     
-    
+
+    public static List<String> getFilePaths(List<String> templates,ClassInfo classInfo) {
+        List<String> filePaths = new ArrayList<>();
+		for(String template : templates){
+			String path_tmep = FileNameUtil.getName(template).replace(".ftl","");
+			String filename_tmep = upperCaseFirstWordV2(path_tmep);
+			filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path(PACKAGE+"."+path_tmep) + classInfo.getClassName() + filename_tmep + ".java");
+		}
+        return filePaths;
+    }
+
+
+	@Deprecated
     public static List<String> getFilePaths(ClassInfo classInfo) {
         List<String> filePaths = new ArrayList<>();
 //        filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path("com.jun.plugin.biz.controller") + classInfo.getClassName() + "Controller.java");
@@ -82,7 +95,7 @@ public class GenUtils {
         filePaths.add(PROJECT_PATH + JAVA_PATH + package2Path(PACKAGE+".service.impl") + classInfo.getClassName() + "ServiceImpl.java");
         return filePaths;
     }
-    
+
 	private static String package2Path(String packageName) {
 		return String.format("/%s/", packageName.contains(".") ? packageName.replaceAll("\\.", "/") : packageName);
 	}
@@ -156,7 +169,11 @@ public class GenUtils {
 	}
 
 	public static String replaceTabblePreStr(String str) {
-		return str.replaceFirst("tab_", "").replaceFirst("tb_", "");
+		str = str.toLowerCase().replaceFirst("tab_", "").replaceFirst("tb_", "").replaceFirst("t_", "");
+		for (String x : props.getProperty("rowRemovePrefixes").split(",")) {
+			str = str.replaceFirst(x.toLowerCase(), "");
+		}
+		return str;
 	}
 
 	public static String replaceRow(String str) {
@@ -180,6 +197,21 @@ public class GenUtils {
 
 	public static String upperCaseFirstWord(String str) {
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
+	}
+	public static String upperCaseFirstWordV2(String str) {
+		if(str!=null && str.length()>0){
+			if(str.contains(".")){
+				String strs[] = str.split("\\.");
+				String temp = "";
+				for(String strtmp : strs){
+					temp += strtmp.substring(0, 1).toUpperCase() + strtmp.substring(1);
+				}
+				return temp;
+			}else{
+				return str.substring(0, 1).toUpperCase() + str.substring(1);
+			}
+		}
+		return str;
 	}
 
 	public static String getType(int value) {
@@ -222,7 +254,7 @@ public class GenUtils {
 	public static void processTemplates(ClassInfo classInfo, Map<String, Object> datas,List<String> templates) throws IOException, TemplateException {
 		//List<String> templates = CodeGeneratorUtils.getTemplates();
 		for(int i = 0 ; i < templates.size() ; i++) {
-			GenUtils.processFile(templates.get(i), datas, GenUtils.getFilePaths(classInfo).get(i));
+			GenUtils.processFile(templates.get(i), datas, GenUtils.getFilePaths(templates,classInfo).get(i));
 		}
 	}
 

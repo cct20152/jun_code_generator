@@ -1,8 +1,8 @@
 <#if isWithPackage?exists && isWithPackage==true>package ${packageName}.controller;</#if>
 <#if isAutoImport?exists && isAutoImport==true>
 import com.alibaba.fastjson.JSON;
-import ${packageName}.vo.${classInfo.className}VO;
-import ${packageName}.dto.${classInfo.className}DTO;
+import ${packageName}.vo.${classInfo.className}Vo;
+import ${packageName}.dto.${classInfo.className}Dto;
 import ${packageName}.mapper.${classInfo.className}Mapper;
 import ${packageName}.entity.${classInfo.className}Entity;
 import ${packageName}.service.${classInfo.className}Service;
@@ -53,8 +53,8 @@ public class ${classInfo.className}Controller {
     @ApiOperation(value = "${classInfo.classComment}-新增")
     @PostMapping("/add")
     @RequiresPermissions("${classInfo.className?uncap_first}:add")
-    public DataResult add(@Validated(${classInfo.className}VO.Create.class) @RequestBody ${classInfo.className}VO vo) {
-    	${classInfo.className}DTO dto = new ${classInfo.className}DTO();
+    public DataResult add(@Validated(${classInfo.className}Vo.Create.class) @RequestBody ${classInfo.className}Vo vo) {
+    	${classInfo.className}Dto dto = new ${classInfo.className}Dto();
     	BeanUtils.copyProperties(vo, dto);
 <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
 <#list classInfo.fieldList as fieldItem >
@@ -86,8 +86,8 @@ public class ${classInfo.className}Controller {
     @ApiOperation(value = "${classInfo.classComment}-删除")
     @DeleteMapping("/remove")
     @RequiresPermissions("${classInfo.className?uncap_first}:remove")
-    public DataResult delete(@Validated(${classInfo.className}VO.Delete.class) @RequestBody ${classInfo.className}VO vo) {
-    	${classInfo.className}DTO dto = new ${classInfo.className}DTO();
+    public DataResult delete(@Validated(${classInfo.className}Vo.Delete.class) @RequestBody ${classInfo.className}Vo vo) {
+    	${classInfo.className}Dto dto = new ${classInfo.className}Dto();
     	BeanUtils.copyProperties(vo, dto);
 <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
 <#list classInfo.fieldList as fieldItem >
@@ -120,8 +120,8 @@ public class ${classInfo.className}Controller {
     @ApiOperation(value = "${classInfo.classComment}-更新")
     @PutMapping("/update")
     @RequiresPermissions("${classInfo.className?uncap_first}:update")
-    public DataResult update(@Validated(${classInfo.className}VO.Update.class) @RequestBody ${classInfo.className}VO vo) {
-    	${classInfo.className}DTO dto = new ${classInfo.className}DTO();
+    public DataResult update(@Validated(${classInfo.className}Vo.Update.class) @RequestBody ${classInfo.className}Vo vo) {
+    	${classInfo.className}Dto dto = new ${classInfo.className}Dto();
     	BeanUtils.copyProperties(vo, dto);
 <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
 <#list classInfo.fieldList as fieldItem >
@@ -153,8 +153,8 @@ public class ${classInfo.className}Controller {
     @ApiOperation(value = "${classInfo.classComment}-查询单条")
     @RequestMapping(value = "/getOne",method = {RequestMethod.GET,RequestMethod.POST})
     @RequiresPermissions("${classInfo.className?uncap_first}:getOne")
-    public DataResult getOne(@RequestBody ${classInfo.className}VO vo) {
-    	${classInfo.className}DTO dto = new ${classInfo.className}DTO();
+    public DataResult getOne(@RequestBody ${classInfo.className}Vo vo) {
+    	${classInfo.className}Dto dto = new ${classInfo.className}Dto();
     	BeanUtils.copyProperties(vo, dto);
 <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
 <#list classInfo.fieldList as fieldItem >
@@ -183,9 +183,9 @@ public class ${classInfo.className}Controller {
     @ApiOperation(value = "${classInfo.classComment}-查询列表分页数据")
     @RequestMapping(value = "/listByPage",method = {RequestMethod.GET,RequestMethod.POST})
     @RequiresPermissions("${classInfo.className?uncap_first}:listByPage")
-    public DataResult listByPage(@RequestBody ${classInfo.className}VO ${classInfo.className?uncap_first}) {
+    public DataResult listByPage(@RequestBody ${classInfo.className}Vo ${classInfo.className?uncap_first}) {
         Page page = new Page(${classInfo.className?uncap_first}.getPage(), ${classInfo.className?uncap_first}.getLimit());
-        ${classInfo.className}DTO dto = new ${classInfo.className}DTO();
+        ${classInfo.className}Dto dto = new ${classInfo.className}Dto();
     	BeanUtils.copyProperties(${classInfo.className?uncap_first}, dto);
         LambdaQueryWrapper<${classInfo.className}Entity> queryWrapper = Wrappers.lambdaQuery();
 <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
@@ -208,7 +208,7 @@ public class ${classInfo.className}Controller {
     @ApiOperation(value = "${classInfo.classComment}-查询全部列表数据")
     @RequestMapping(value = "/list",method = {RequestMethod.GET,RequestMethod.POST})
     @RequiresPermissions("${classInfo.className?uncap_first}:list")
-    public DataResult findListByPage(@RequestBody ${classInfo.className}VO ${classInfo.className?uncap_first}) {
+    public DataResult findListByPage(@RequestBody ${classInfo.className}Vo ${classInfo.className?uncap_first}) {
         LambdaQueryWrapper<${classInfo.className}Entity> queryWrapper = Wrappers.lambdaQuery();
 <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
 <#list classInfo.fieldList as fieldItem >

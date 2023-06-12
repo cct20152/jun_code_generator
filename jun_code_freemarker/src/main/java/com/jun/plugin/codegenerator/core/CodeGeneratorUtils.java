@@ -41,6 +41,17 @@ public class CodeGeneratorUtils {
 
 
 	public static void genTables(String [] tables) throws Exception {
+		genTables(tables,"");
+	}
+	public static void genTables(String [] tables,String genType) throws Exception {
+		if(StringUtils.isEmpty(genType)){
+			genType = "single";
+		}
+		List<String> templates = getTemplates();
+//		switch (genType){
+//			case "single" : templates = getTemplates();break;
+////			case "parent" : templates = getTemplates();break;
+//		}
 		List<ClassInfo> classInfos = GenUtils.getClassInfo(tables);
 		classInfos.forEach(classInfo -> {
 			Map<String, Object> datas = new HashMap<String, Object>();
@@ -56,7 +67,7 @@ public class CodeGeneratorUtils {
 			Map<String, String> result = new HashMap<String, String>();
 			try {
 				//GenUtils.processTemplatesStringWriter(datas, result);
-				GenUtils.processTemplates(classInfo, datas,getTemplates());
+				GenUtils.processTemplates(classInfo, datas,templates);
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (TemplateException e) {
@@ -86,13 +97,21 @@ public class CodeGeneratorUtils {
 //        templates.add("code-generator/mybatis.ftl");
 //        templates.add("code-generator/model.ftl");
         // ************************************************************************************
-        templates.add("code-generator/mybatis-plus-v2/plus-controller.ftl");
-        templates.add("code-generator/mybatis-plus-v2/plus-entity.ftl");
-        templates.add("code-generator/mybatis-plus-v2/plus-mapper.ftl");
-        templates.add("code-generator/mybatis-plus-v2/plus-service.ftl");
-        templates.add("code-generator/mybatis-plus-v2/plus-dto.ftl");
-        templates.add("code-generator/mybatis-plus-v2/plus-vo.ftl");
-        templates.add("code-generator/mybatis-plus-v2/plus-serviceimpl.ftl");
+
+        templates.add("code-generator/mybatis-plus-single/controller.ftl");
+        templates.add("code-generator/mybatis-plus-single/entity.ftl");
+        templates.add("code-generator/mybatis-plus-single/mapper.ftl");
+        templates.add("code-generator/mybatis-plus-single/service.ftl");
+        templates.add("code-generator/mybatis-plus-single/dto.ftl");
+        templates.add("code-generator/mybatis-plus-single/vo.ftl");
+        templates.add("code-generator/mybatis-plus-single/service.impl.ftl");
+//        templates.add("code-generator/mybatis-plus-v2/plus-controller.ftl");
+//        templates.add("code-generator/mybatis-plus-v2/plus-entity.ftl");
+//        templates.add("code-generator/mybatis-plus-v2/plus-mapper.ftl");
+//        templates.add("code-generator/mybatis-plus-v2/plus-service.ftl");
+//        templates.add("code-generator/mybatis-plus-v2/plus-dto.ftl");
+//        templates.add("code-generator/mybatis-plus-v2/plus-vo.ftl");
+//        templates.add("code-generator/mybatis-plus-v2/plus-serviceimpl.ftl");
         return templates;
     }
 //    public static Map<String, Object> getPackages() {
